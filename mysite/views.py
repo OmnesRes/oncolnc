@@ -20,10 +20,13 @@ from pan_cancer.models import SKCM
 from pan_cancer.models import STAD
 from pan_cancer.models import PATIENTS
 
+
+
 cancers=['BLCA','BRCA','CESC','COAD','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV','SKCM','STAD']
 CANCERS={'BLCA':BLCA,'BRCA':BRCA,'CESC':CESC,'COAD':COAD,'GBM':GBM,'HNSC':HNSC,'KIRC':KIRC,'KIRP':KIRP,'LAML':LAML,'LGG':LGG,\
          'LIHC':LIHC,'LUAD':LUAD,'LUSC':LUSC,'OV':OV,'SKCM':SKCM,'STAD':STAD}
 death_dic={"Alive":0,"Dead":1}
+
 
 
 def plot_kaplan(survtimes):

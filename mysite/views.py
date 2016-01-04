@@ -157,7 +157,7 @@ def kaplan(request):
                 logrank=str(res).split()[-1]
                 return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':False,\
                                                        'input_error':False,'empty_error':False,'low_patients':low_patients,\
-                                                       'high_patients':high_patients,'upper_error':False,'logrank':1})
+                                                       'high_patients':high_patients,'upper_error':False,'logrank':logrank})
         elif (lower and not upper) or (upper and not lower):
             return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':False,\
                                                        'input_error':False,'empty_error':True,'upper_error':False})

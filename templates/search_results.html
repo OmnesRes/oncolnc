@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+
+<head>
+    <title>Search Results</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+  <style>
+  .table th{
+    text-align:center;
+    font-size:20px;
+  }
+  .table td{
+    text-align:center;
+    font-size:16px;
+  }
+
+  .message{
+    color:red;
+    font-size:20px;
+  }
+  </style>
+</head>
+<body>
+  <div class="col-sm-12 text-center">
+    <span style="font-size: 40px">Cox regression results for {{ query }}</span>
+  <div class='container'>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>Cancer</th>
+          <th>Cox coefficient</th>
+          <th>P-value</th>
+          <th>FDR corrected</th>
+          <th>Rank</th>
+          <th>Plot Kaplan?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{cancers.0}}</td>
+          <td>{{results.0.Cox}}</td>
+          <td>{{ results.0.p_value }}</td>
+          <td>{{ results.0.fdr }}</td>
+          <td>{{ results.0.rank }}</td>
+          {% if results.0 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.0 }}>
+              <input type="hidden" name="gene" value={{ results.0.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td>{{cancers.1}}</td>
+          <td>{{results.1.Cox}}</td>
+          <td>{{ results.1.p_value }}</td>
+          <td>{{ results.1.fdr }}</td>
+          <td>{{ results.1.rank }}</td>
+          {% if results.1 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.1 }}>
+              <input type="hidden" name="gene" value={{ results.1.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.2}}</td>
+          <td>{{results.2.Cox}}</td>
+          <td>{{ results.2.p_value }}</td>
+          <td>{{ results.2.fdr }}</td>
+          <td>{{ results.2.rank }}</td>
+          {% if results.2 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.2 }}>
+              <input type="hidden" name="gene" value={{ results.2.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.3}}</td>
+          <td>{{results.3.Cox}}</td>
+          <td>{{ results.3.p_value }}</td>
+          <td>{{ results.3.fdr }}</td>
+          <td>{{ results.3.rank }}</td>
+          {% if results.3 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.3 }}>
+              <input type="hidden" name="gene" value={{ results.3.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.4}}</td>
+          <td>{{results.4.Cox}}</td>
+          <td>{{ results.4.p_value }}</td>
+          <td>{{ results.4.fdr }}</td>
+          <td>{{ results.4.rank }}</td>
+          {% if results.4 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.4 }}>
+              <input type="hidden" name="gene" value={{ results.4.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td>{{cancers.5}}</td>
+          <td>{{results.5.Cox}}</td>
+          <td>{{ results.5.p_value }}</td>
+          <td>{{ results.5.fdr }}</td>
+          <td>{{ results.5.rank }}</td>
+          {% if results.5 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.5 }}>
+              <input type="hidden" name="gene" value={{ results.5.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.6}}</td>
+          <td>{{results.6.Cox}}</td>
+          <td>{{ results.6.p_value }}</td>
+          <td>{{ results.6.fdr }}</td>
+          <td>{{ results.6.rank }}</td>
+          {% if results.6 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.6 }}>
+              <input type="hidden" name="gene" value={{ results.6.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.7}}</td>
+          <td>{{results.7.Cox}}</td>
+          <td>{{ results.7.p_value }}</td>
+          <td>{{ results.7.fdr }}</td>
+          <td>{{ results.7.rank }}</td>
+          {% if results.7 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.7 }}>
+              <input type="hidden" name="gene" value={{ results.7.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.8}}</td>
+          <td>{{results.8.Cox}}</td>
+          <td>{{ results.8.p_value }}</td>
+          <td>{{ results.8.fdr }}</td>
+          <td>{{ results.8.rank }}</td>
+          {% if results.8 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.8 }}>
+              <input type="hidden" name="gene" value={{ results.8.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td>{{cancers.9}}</td>
+          <td>{{results.9.Cox}}</td>
+          <td>{{ results.9.p_value }}</td>
+          <td>{{ results.9.fdr }}</td>
+          <td>{{ results.9.rank }}</td>
+          {% if results.9 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.9}}>
+              <input type="hidden" name="gene" value={{ results.9.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.10}}</td>
+          <td>{{results.10.Cox}}</td>
+          <td>{{ results.10.p_value }}</td>
+          <td>{{ results.10.fdr }}</td>
+          <td>{{ results.10.rank }}</td>
+          {% if results.10 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.10 }}>
+              <input type="hidden" name="gene" value={{ results.10.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.11}}</td>
+          <td>{{results.11.Cox}}</td>
+          <td>{{ results.11.p_value }}</td>
+          <td>{{ results.11.fdr }}</td>
+          <td>{{ results.11.rank }}</td>
+          {% if results.11 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.11 }}>
+              <input type="hidden" name="gene" value={{ results.11.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+          </tr>
+          <tr>
+          <td>{{cancers.12}}</td>
+          <td>{{results.12.Cox}}</td>
+          <td>{{ results.12.p_value }}</td>
+          <td>{{ results.12.fdr }}</td>
+          <td>{{ results.12.rank }}</td>
+          {% if results.12 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.12 }}>
+              <input type="hidden" name="gene" value={{ results.12.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td>{{cancers.13}}</td>
+          <td>{{results.13.Cox}}</td>
+          <td>{{ results.13.p_value }}</td>
+          <td>{{ results.13.fdr }}</td>
+          <td>{{ results.13.rank }}</td>
+          {% if results.13 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.13 }}>
+              <input type="hidden" name="gene" value={{ results.13.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+          <tr>
+          <td>{{cancers.14}}</td>
+          <td>{{results.14.Cox}}</td>
+          <td>{{ results.14.p_value }}</td>
+          <td>{{ results.14.fdr }}</td>
+          <td>{{ results.14.rank }}</td>
+          {% if results.14 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.14 }}>
+              <input type="hidden" name="gene" value={{ results.14.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td>{{cancers.15}}</td>
+          <td>{{results.15.Cox}}</td>
+          <td>{{ results.15.p_value }}</td>
+          <td>{{ results.15.fdr }}</td>
+          <td>{{ results.15.rank }}</td>
+          {% if results.15 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.15 }}>
+              <input type="hidden" name="gene" value={{ results.15.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        <tr>
+          <td>{{cancers.16}}</td>
+          <td>{{results.16.Cox}}</td>
+          <td>{{ results.16.p_value }}</td>
+          <td>{{ results.16.fdr }}</td>
+          <td>{{ results.16.rank }}</td>
+          {% if results.16 %}
+          <td>
+            <form action='/kaplan' method='get' target='_blank'>
+              <input type="hidden" name="cancer" value={{ cancers.16 }}>
+              <input type="hidden" name="gene" value={{ results.16.gene }}>
+              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+      </tbody>
+    </table>
+  </table>
+  {% if missing %}
+  <div class="col-sm-12 text-center message">
+    Missing data?  Some genes don't meet the expression cutoff for the analysis, or are absent from the TCGA Tier 3 file for that cancer.
+  </div>
+  {% endif %}
+</body>
+</html>

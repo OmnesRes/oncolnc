@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+	<title> {% block title %} OncoLNC {% endblock %} </title>
+	<meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<style>
+	body{
+		font-family:"Arial",sans-serif;
+	}
+	.welcome{
+		margin-top:30px;
+		margin-bottom:20px;
+	}
+	.entry{
+		margin-top:100px;
+	}
+	.form-control{
+		font-size:60px;
+		text-align:center;
+		height:100px;
+	}
+	.info {
+		clear:all;
+		font-size:30px;
+		text-align:justify;
+	}
+	p {
+		position:relative;
+		font-size:20px;
+		bottom:200px;
+	}
+	</style>
+</head>
+
+
+
+<body>
+	<div class="col-sm-12">
+			<div class="col-sm-6 col-sm-push-3 text-center welcome">
+			<h1 style="font-size:60px">Welcome</h1>
+			</div>
+	</div>
+	<div class="col-sm-12">
+		<div class="col-sm-8 col-sm-push-2 info">
+			Here you can link TCGA survival data to lncRNAs, mRNAs, or miRNAs.  To get started simply input either a MiTranscriptome beta lncRNA, or a HUGO gene symbol for a Tier 3 TCGA mRNA or miRNA.  More information can be found at this publication, youtube, or Omnes Res. Site is under construction, data may be a placeholder.
+		</div>
+	</div>
+	<div class="col-sm-12">
+		<div class="col-sm-6 col-sm-push-3 text-center entry">
+	    	<form action="/search_results" method="get">
+	    		<div class="form-group">
+	    			<input type="text" class="form-control input-lg" name="q" maxlength=10 placeholder="Your favorite gene">
+	    		</div>
+	    		<button type="submit" class="btn btn-primary btn-lg" style="clear:all">Submit</button>
+	    	</form>
+	    	{% if error %}
+			<p style="color: red;">Please submit a valid gene such as TP53.</p>
+			{% endif %}
+		</div>
+	</div>
+	<div class="col-sm-12 text-center">
+		{% if mirna %}
+		<span style="font-size:20px">Looking for a miRNA?  Those names can be tricky.  Here is a list of the miRNAs in the database.</span>
+		{% endif %}
+	</div>
+</body>

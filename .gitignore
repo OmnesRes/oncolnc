@@ -27,7 +27,7 @@ var/
 *.egg
 
 # Database
-.sqlite3
+*.sqlite3
 
 
 # PyInstaller

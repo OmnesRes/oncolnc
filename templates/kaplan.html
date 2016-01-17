@@ -93,7 +93,11 @@
     {% if lower and not addition_error and not input_error and not empty_error and not upper_error%}
     <div class="col-sm-12 text-center">
     	<p style="font-size:20px">If you make multiple plots be sure to reload the page to ensure an updated image!</p>
+    	{% if logrank %}
 		<span class="info">Logrank p-value={{ logrank }} <a href="/download_kaplan" style='center'>Download pdf</a></span>
+		{% else %}
+		<span class="info"><a href="/download_kaplan" style='center'>Download pdf</a></span>
+		{% endif %}
 	</div>
     <div class="col-sm-12">
 		<img class ="img-responsive center-block" src='/make_kaplan' width="1000" height='530.4'/>

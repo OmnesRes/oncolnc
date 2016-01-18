@@ -4,7 +4,10 @@
 <head>
 	<title> {% block title %}Home{% endblock %} </title>
 	<meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<style>
 	body{
 		font-family:"Arial",sans-serif;
@@ -31,6 +34,22 @@
 		font-size:20px;
 		bottom:200px;
 	}
+
+
+	.tooltip-inner{
+    max-width: 300px;
+    /* If max-width does not work, try using width instead */
+    width: 300px; 
+    font-size:20px;
+    color:black;
+    background-color: white;
+    border: 3px solid #337AB7;
+	}
+	.tooltip.top .tooltip-arrow{
+	border-top-color: #337AB7;
+	border-top-width: 6px;
+	}
+
 	</style>
 </head>
 
@@ -44,7 +63,7 @@
 	</div>
 	<div class="col-sm-12">
 		<div class="col-sm-8 col-sm-push-2 info">
-			Here you can link TCGA survival data to lncRNAs, mRNAs, or miRNAs.  To get started simply input either a MiTranscriptome beta lncRNA, or a HUGO gene symbol for a Tier 3 TCGA mRNA or miRNA.  More information can be found at this publication, youtube, or Omnes Res. Site is under construction, data may be a placeholder.
+			Here you can link TCGA survival data to lncRNAs, mRNAs, or miRNAs.  To get started simply input either a MiTranscriptome beta lncRNA<sup data-toggle="tooltip" title="Either a Transcript ID or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>, Tier 3 TCGA mRNA<sup data-toggle="tooltip" title="Either a current Entrez Gene ID or HUGO Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup> or miRNA<sup data-toggle="tooltip" title="Either a mature miRBase Accession Number or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>.  More information can be found at this publication, youtube, or Omnes Res. Site is under construction, data may be a placeholder.
 		</div>
 	</div>
 	<div class="col-sm-12">
@@ -60,9 +79,12 @@
 			{% endif %}
 		</div>
 	</div>
-	<div class="col-sm-12 text-center">
-		{% if mirna %}
-		<span style="font-size:20px">Looking for a miRNA?  Those names can be tricky.  Here is a list of the miRNAs in the database.</span>
-		{% endif %}
+	<div class="col-sm-12 text-center" style="position:absolute;bottom:0">
+		<span style="font-size:20px"><i class="fa fa-copyright"></i> 2016 Omnes Res</span>
 	</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 </body>

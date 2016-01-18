@@ -134,7 +134,7 @@ def kaplan(request):
                 first_line='{0:<16}{1:<5}{2:>10}{3:>15}'.format('Patient','Days','Status','Expression\n')
                 low_patients=first_line+''.join(['{0:<15} {1:<5} {2:>9} {3:>14}'.format(i[0],str(i[1]),i[2],i[3]) for i in bottom_patients])
                 high_patients=first_line+''.join(['{0:<15} {1:<5} {2:>9} {3:>14}'.format(i[0],str(i[1]),i[2],i[3]) for i in top_patients])
-                if lower!=100:
+                if int(lower)!=100:
                     times=[i[1] for i in bottom_patients]+[i[1] for i in top_patients]
                     died=[death_dic[i[2]] for i in bottom_patients]+[death_dic[i[2]] for i in top_patients]
                     group=[1 for i in bottom_patients]+[2 for i in top_patients]
@@ -276,7 +276,7 @@ def download_kaplan(request):
         top=int(len(data)*int(Upper)/100.0)*-1
         bottom_patients=[i[1] for i in data[:bottom]]
         if top==0:
-            top_patients=0
+            top_patients=[[]]
         else:
             top_patients=[i[1] for i in data[top:]]
         survtimes=[[int(i[1]),i[2]] for i in bottom_patients]
@@ -301,24 +301,24 @@ def download_kaplan(request):
 
         for i in k_plot[2]:
             ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='b')
+        if top!=0:
+            survtimes=[[int(i[1]),i[2]] for i in top_patients]
+            survtimes.sort(key=lambda x:(x[0],x[1]))
+            k_plot=plot_kaplan(survtimes)
+            start=0
+            for i in k_plot[0]:
+                ax.hlines(i[1]*100,start,i[0],linewidths=width,color='r',label='cluster 2')
+                start=i[0]
 
-        survtimes=[[int(i[1]),i[2]] for i in top_patients]
-        survtimes.sort(key=lambda x:(x[0],x[1]))
-        k_plot=plot_kaplan(survtimes)
-        start=0
-        for i in k_plot[0]:
-            ax.hlines(i[1]*100,start,i[0],linewidths=width,color='r',label='cluster 2')
-            start=i[0]
+            if k_plot[-1][-1][0]>k_plot[0][-1][0]:
+                ax.hlines(k_plot[-1][-1][1]*100,k_plot[0][-1][0],k_plot[-1][-1][0],linewidths=width,color='r')
 
-        if k_plot[-1][-1][0]>k_plot[0][-1][0]:
-            ax.hlines(k_plot[-1][-1][1]*100,k_plot[0][-1][0],k_plot[-1][-1][0],linewidths=width,color='r')
-
-        for i in k_plot[1]:
-            cluster2=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='r')
+            for i in k_plot[1]:
+                cluster2=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='r')
 
 
-        for i in k_plot[2]:
-            ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='r')
+            for i in k_plot[2]:
+                ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='r')
         ax.tick_params(axis='x',length=15,width=3,direction='out',labelsize=30)
         ax.tick_params(axis='y',length=15,width=3,direction='out',labelsize=30)
         ax.spines['bottom'].set_position(['outward',10])
@@ -331,9 +331,13 @@ def download_kaplan(request):
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
         cluster1=ax.hlines(0,0,0,linewidths=10,color='b',label='cluster 1')
-        cluster2=ax.hlines(0,0,0,linewidths=10,color='r',label='cluster 2')
-        ax.legend((cluster1,cluster2),('   Low \n N=%s' % len(bottom_patients),'   High \n N=%s' % len(top_patients)),\
-                  frameon=False,fontsize=25,ncol=2, loc='upper center',handletextpad=0,borderpad=0)
+        if top!=0:
+            cluster2=ax.hlines(0,0,0,linewidths=10,color='r',label='cluster 2')
+        if top!=0:
+            ax.legend((cluster1,cluster2),('   Low \n N=%s' % len(bottom_patients),'   High \n N=%s' % len(top_patients)),\
+                      frameon=False,fontsize=25,ncol=2, loc='upper center',handletextpad=0,borderpad=0)
+        else:
+            pass
         ax.set_ylim(0,105)
         ax.set_xlim(0,)
         ax.set_xlabel('Days',fontsize=40,labelpad=20)

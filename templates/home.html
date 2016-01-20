@@ -70,12 +70,15 @@
 		<div class="col-sm-6 col-sm-push-3 text-center entry">
 	    	<form action="/search_results" method="get">
 	    		<div class="form-group">
-	    			<input type="text" class="form-control input-lg" name="q" maxlength=10 placeholder="Your favorite gene">
+	    			<input type="text" class="form-control input-lg" name="q" maxlength=22 placeholder="Your favorite gene">
 	    		</div>
 	    		<button type="submit" class="btn btn-primary btn-lg" style="clear:all">Submit</button>
 	    	</form>
 	    	{% if error %}
 			<p style="color: red;">Please submit a valid gene such as TP53.</p>
+			{% endif %}
+			{% if empty %}
+			<p style="color: red;">Please enter something.</p>
 			{% endif %}
 		</div>
 	</div>

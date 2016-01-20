@@ -7,11 +7,6 @@
     <title>Plot</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
 	<style>
 
 	.form-control{
@@ -61,7 +56,7 @@
 
 <body>
 	<div class="col-sm-12 text-center">
-		<span style="font-size: 40px">Kaplan plot for {{ gene }} in {{cancer}}</span>
+		<span style="font-size: 40px">Kaplan plot for {{ raw }} in {{cancer}}</span>
 		<br>
 		{% if lower %}
 		<form action="" method="get" class="form-inline">
@@ -72,7 +67,8 @@
     			<input type="text" class="form-control" name="upper" maxlength=3 value= {{ upper }}>
     		</div>
     		<input type="hidden" name="cancer" value={{ cancer }}>
-    		<input type="hidden" name="gene" value={{ gene }}>
+    		<input type="hidden" name="gene_id" value={{ gene_id }}>
+    		<input type="hidden" name="raw" value={{ raw }}>
     		<button type="submit" class="btn btn-primary">Submit</button>
     	</form>
     	{% else %}
@@ -84,7 +80,8 @@
     			<input type="text" class="form-control" name="upper" maxlength=3 placeholder="Upper Percentile">
     		</div>
     		<input type="hidden" name="cancer" value={{ cancer }}>
-    		<input type="hidden" name="gene" value={{ gene }}>
+    		<input type="hidden" name="gene_id" value={{ gene_id }}>
+    		<input type="hidden" name="raw" value={{ raw }}>
     		<button type="submit" class="btn btn-primary">Submit</button>
     	</form>
     	{% endif %}

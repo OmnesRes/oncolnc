@@ -6,6 +6,7 @@ from pan_cancer.models import BLCA
 from pan_cancer.models import BRCA
 from pan_cancer.models import CESC
 from pan_cancer.models import COAD
+from pan_cancer.models import ESCA
 from pan_cancer.models import GBM
 from pan_cancer.models import HNSC
 from pan_cancer.models import KIRC
@@ -16,15 +17,22 @@ from pan_cancer.models import LIHC
 from pan_cancer.models import LUAD
 from pan_cancer.models import LUSC
 from pan_cancer.models import OV
+from pan_cancer.models import PAAD
+from pan_cancer.models import READ
+from pan_cancer.models import SARC
 from pan_cancer.models import SKCM
 from pan_cancer.models import STAD
-from pan_cancer.models import PATIENTS
+from pan_cancer.models import UCEC
+from pan_cancer.models import mRNA_PATIENTS
+from pan_cancer.models import miRNA_PATIENTS
+from pan_cancer.models import lncRNA_PATIENTS
 
 
 
-cancers=['BLCA','BRCA','CESC','COAD','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV','SKCM','STAD']
-CANCERS={'BLCA':BLCA,'BRCA':BRCA,'CESC':CESC,'COAD':COAD,'GBM':GBM,'HNSC':HNSC,'KIRC':KIRC,'KIRP':KIRP,'LAML':LAML,'LGG':LGG,\
-         'LIHC':LIHC,'LUAD':LUAD,'LUSC':LUSC,'OV':OV,'SKCM':SKCM,'STAD':STAD}
+cancers=['BLCA','BRCA','CESC','COAD','ESCA','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV',\
+         'PAAD','READ','SARC','SKCM','STAD','UCEC']
+CANCERS={'BLCA':BLCA,'BRCA':BRCA,'CESC':CESC,'COAD':COAD,'ESCA':ESCA,'GBM':GBM,'HNSC':HNSC,'KIRC':KIRC,'KIRP':KIRP,'LAML':LAML,\
+         'LGG':LGG,'LIHC':LIHC,'LUAD':LUAD,'LUSC':LUSC,'OV':OV,'PAAD':PAAD,'READ':READ,'SARC':SARC,'SKCM':SKCM,'STAD':STAD,'UCEC':UCEC}
 death_dic={"Alive":0,"Dead":1}
 
 
@@ -73,6 +81,9 @@ def search_results(request):
         error=False
         results=[]
         if 'q' in request.GET:
+            raw=request.GET['q'].strip()
+            if raw=='':
+                return render(request, 'home.html', {'empty': True})
             q=request.GET['q'].strip().upper()
             for i in cancers:
                 try:
@@ -80,21 +91,26 @@ def search_results(request):
                     results.append(gene)
                 except:
                     results.append(None)
-            if results==[None]*16:
-                error=True
-                mirna=False
-                if 'MIR' in q:
-                    mirna=True
-                return render(request, 'home.html', {'error': True,'mirna':mirna})
+            if results==[None]*21:
+                results=[]
+                for i in cancers:
+                    try:
+                        gene=CANCERS[i].objects.get(gene_id=q)
+                        results.append(gene)
+                    except:
+                        results.append(None)
+                if results==[None]*21:
+                    error=True
+                    return render(request, 'home.html', {'error': error})
             missing=False
             if None in results:
                 missing=True
             return render(request, 'search_results.html',
-                          {'results':results, 'query': q,'cancers': cancers,'CANCERS':CANCERS,'missing':missing})
+                          {'results':results, 'cancers': cancers,'missing':missing,'raw':raw})
         else:
             return render(request, 'home.html', {'error': error})
     else:
-        return HttpResponse('Please get to this page by clicking the PLOT button ;)')
+        return HttpResponse('Please get to this page by clicking the Submit button ;)')
 
 
 
@@ -102,27 +118,36 @@ def search_results(request):
 
 def kaplan(request):
     import re
-    from rpy2 import robjects as ro
-    ro.r('library(survival)')
+##    from rpy2 import robjects as ro
+##    ro.r('library(survival)')
     cancer=request.GET.get('cancer','none')
-    gene=request.GET.get('gene','none')
+    gene_id=request.GET.get('gene_id','none')
     lower=request.GET.get('lower',False)
-    upper=request.GET.get('upper',False)       
+    upper=request.GET.get('upper',False)
+    raw=request.GET.get('raw','none')
     if request.META.get('HTTP_REFERER',False):
         if lower and upper:
             if not re.search('^[0-9]+$',lower) or not re.search('^[0-9]+$',upper):
-                return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':False,\
-                                                       'input_error':True,'empty_error':False,'upper_error':False})
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'lower':lower,'upper':upper,\
+                                                       'addition_error':False,'input_error':True,'empty_error':False,\
+                                                       'upper_error':False})
             elif int(lower)+int(upper)>100:
-                return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':True,
-                                                       'input_error':False,'empty_error':False,'upper_error':False})
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'lower':lower, 'upper':upper,\
+                                                       'addition_error':True,'input_error':False,'empty_error':False,\
+                                                       'upper_error':False})
             elif int(upper)==100:
-                return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':False,
-                                                       'input_error':False,'empty_error':False,'upper_error':True})
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw, 'lower':lower, 'upper':upper,\
+                                                       'addition_error':False,'input_error':False,'empty_error':False,\
+                                                       'upper_error':True})
             else:
-                patients=eval(PATIENTS.objects.get(cancer=cancer).clinical)
-                expression=eval(CANCERS[cancer].objects.get(gene=gene).expression)
-                data=zip(expression,patients)
+                if CANCERS[cancer].objects.get(gene_id=gene_id).species=='mRNA':
+                    patients=eval(mRNA_PATIENTS.objects.get(cancer=cancer).clinical)
+                elif CANCERS[cancer].objects.get(gene_id=gene_id).species=='miRNA':
+                    patients=eval(miRNA_PATIENTS.objects.get(cancer=cancer).clinical)
+                else:
+                    patients=eval(lncRNA_PATIENTS.objects.get(cancer=cancer).clinical)
+                expression=eval(CANCERS[cancer].objects.get(gene_id=gene_id).expression)
+                data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
                 data.sort()
                 bottom=int(len(data)*int(lower)/100.0)
                 top=int(len(data)*int(upper)/100.0)*-1
@@ -145,14 +170,14 @@ def kaplan(request):
                     logrank=str(res).split()[-1]
                 else:
                     logrank=False
-                return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':False,\
+                return render(request, 'kaplan.html', {'gene_id':gene_id,'cancer':cancer,'raw':raw,'lower':lower,'upper':upper,'addition_error':False,\
                                                        'input_error':False,'empty_error':False,'low_patients':low_patients,\
                                                        'high_patients':high_patients,'upper_error':False,'logrank':logrank})
         elif (lower and not upper) or (upper and not lower):
-            return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':False,\
+            return render(request, 'kaplan.html', {'gene_id':gene_id,'cancer':cancer,'raw':raw,'lower':lower,'upper':upper,'addition_error':False,\
                                                        'input_error':False,'empty_error':True,'upper_error':False})
         else:
-            return render(request, 'kaplan.html', {'gene': gene,'cancer':cancer, 'lower':lower, 'upper':upper, 'addition_error':False,\
+            return render(request, 'kaplan.html', {'gene_id':gene_id,'cancer':cancer,'raw':raw,'lower':lower,'upper':upper,'addition_error':False,\
                                                        'input_error':False,'empty_error':False,'upper_error':False})
     else:
         return HttpResponse('Please get to this page by clicking the PLOT button ;)')
@@ -168,12 +193,18 @@ def make_kaplan(request):
         return HttpResponse(message)
     else:
         Cancer=request.META['HTTP_REFERER'].split('cancer=')[1].split('&')[0]
-        Gene=request.META['HTTP_REFERER'].split('gene=')[1]
+        Gene_id=request.META['HTTP_REFERER'].split('gene_id=')[1].split('&')[0]
+        Raw=request.META['HTTP_REFERER'].split('raw=')[1]
         Lower=request.META['HTTP_REFERER'].split('lower=')[1].split('&')[0]
         Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
-        patients=eval(PATIENTS.objects.get(cancer=Cancer).clinical)
-        expression=eval(CANCERS[Cancer].objects.get(gene=Gene).expression)
-        data=zip(expression,patients)
+        if CANCERS[Cancer].objects.get(gene_id=Gene_id).species=='mRNA':
+            patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+        elif CANCERS[Cancer].objects.get(gene_id=Gene_id).species=='miRNA':
+            patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+        else:
+            patients=eval(lncRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+        expression=eval(CANCERS[Cancer].objects.get(gene_id=Gene_id).expression)
+        data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
         data.sort()
         bottom=int(len(data)*int(Lower)/100.0)
         top=int(len(data)*int(Upper)/100.0)*-1
@@ -265,12 +296,17 @@ def download_kaplan(request):
         return HttpResponse(message)
     else:
         Cancer=request.META['HTTP_REFERER'].split('cancer=')[1].split('&')[0]
-        Gene=request.META['HTTP_REFERER'].split('gene=')[1]
+        Gene_id=request.META['HTTP_REFERER'].split('gene_id=')[1].split('&')[0]
         Lower=request.META['HTTP_REFERER'].split('lower=')[1].split('&')[0]
         Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
-        patients=eval(PATIENTS.objects.get(cancer=Cancer).clinical)
-        expression=eval(CANCERS[Cancer].objects.get(gene=Gene).expression)
-        data=zip(expression,patients)
+        if CANCERS[Cancer].objects.get(gene_id=Gene_id).species=='mRNA':
+            patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+        elif CANCERS[Cancer].objects.get(gene_id=Gene_id).species=='miRNA':
+            patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+        else:
+            patients=eval(lncRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+        expression=eval(CANCERS[Cancer].objects.get(gene_id=Gene_id).expression)
+        data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
         data.sort()
         bottom=int(len(data)*int(Lower)/100.0)
         top=int(len(data)*int(Upper)/100.0)*-1
@@ -344,7 +380,7 @@ def download_kaplan(request):
         ax.set_ylabel('% Surviving',fontsize=40)
         canvas=FigureCanvasAgg(fig)
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s_%s_%s_%s.pdf' % (Cancer,Gene,Lower,Upper)
+        response['Content-Disposition'] = 'filename=%s_%s_%s_%s.pdf' % (Cancer,Gene_id,Lower,Upper)
         buffer=StringIO.StringIO()
         canvas.print_pdf(buffer)
         pdf=buffer.getvalue()

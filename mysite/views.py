@@ -118,8 +118,8 @@ def search_results(request):
 
 def kaplan(request):
     import re
-    from rpy2 import robjects as ro
-    ro.r('library(survival)')
+##    from rpy2 import robjects as ro
+##    ro.r('library(survival)')
     cancer=request.GET.get('cancer','none')
     gene_id=request.GET.get('gene_id','none')
     lower=request.GET.get('lower',False)
@@ -160,14 +160,16 @@ def kaplan(request):
                 low_patients=first_line+''.join(['{0:<15} {1:<5} {2:>9} {3:>14}'.format(i[0],str(i[1]),i[2],i[3]) for i in bottom_patients])
                 high_patients=first_line+''.join(['{0:<15} {1:<5} {2:>9} {3:>14}'.format(i[0],str(i[1]),i[2],i[3]) for i in top_patients])
                 if int(lower)!=100:
-                    times=[i[1] for i in bottom_patients]+[i[1] for i in top_patients]
-                    died=[death_dic[i[2]] for i in bottom_patients]+[death_dic[i[2]] for i in top_patients]
-                    group=[1 for i in bottom_patients]+[2 for i in top_patients]
-                    ro.globalenv['times']=ro.IntVector(times)
-                    ro.globalenv['died']=ro.IntVector(died)
-                    ro.globalenv['group']=ro.IntVector(group)
-                    res=ro.r('survdiff(formula = Surv(times, died) ~ as.factor(group))')
-                    logrank=str(res).split()[-1]
+                    logrank=1
+                    pass
+##                    times=[i[1] for i in bottom_patients]+[i[1] for i in top_patients]
+##                    died=[death_dic[i[2]] for i in bottom_patients]+[death_dic[i[2]] for i in top_patients]
+##                    group=[1 for i in bottom_patients]+[2 for i in top_patients]
+##                    ro.globalenv['times']=ro.IntVector(times)
+##                    ro.globalenv['died']=ro.IntVector(died)
+##                    ro.globalenv['group']=ro.IntVector(group)
+##                    res=ro.r('survdiff(formula = Surv(times, died) ~ as.factor(group))')
+##                    logrank=str(res).split()[-1]
                 else:
                     logrank=False
                 return render(request, 'kaplan.html', {'gene_id':gene_id,'cancer':cancer,'raw':raw,'lower':lower,'upper':upper,'addition_error':False,\

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from .models import ALL_GENES
+from .models import ALL_GENE_IDS
 from .models import BLCA
 from .models import BRCA
 from .models import CESC
@@ -25,6 +27,8 @@ from .models import miRNA_PATIENTS
 from .models import lncRNA_PATIENTS
 # Register your models here.
 
+admin.site.register(ALL_GENES)
+admin.site.register(ALL_GENE_IDS)
 admin.site.register(BLCA)
 admin.site.register(BRCA)
 admin.site.register(CESC)

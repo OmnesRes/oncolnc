@@ -2,6 +2,8 @@ from django.http import  Http404, HttpResponse
 from django.template.loader import get_template
 from django.template import Context
 from django.shortcuts import render
+from pan_cancer.models import ALL_GENES
+from pan_cancer.models import ALL_GENE_IDS
 from pan_cancer.models import BLCA
 from pan_cancer.models import BRCA
 from pan_cancer.models import CESC
@@ -85,23 +87,36 @@ def search_results(request):
             if raw=='':
                 return render(request, 'home.html', {'empty': True})
             q=request.GET['q'].strip().upper()
-            for i in cancers:
+            in_genes=False
+            in_gene_ids=False
+            try:
+                ALL_GENES.objects.get(gene=q)
+                in_genes=True
+            except:
+                pass
+            if in_genes:
+                for i in cancers:
+                    try:
+                        gene=CANCERS[i].objects.get(gene=q)
+                        results.append(gene)
+                    except:
+                        results.append(None)
+            else:
                 try:
-                    gene=CANCERS[i].objects.get(gene=q)
-                    results.append(gene)
+                    ALL_GENE_IDS.objects.get(gene_id=q)
+                    in_gene_ids=True
                 except:
-                    results.append(None)
-            if results==[None]*21:
-                results=[]
+                    pass
+            if in_gene_ids:
                 for i in cancers:
                     try:
                         gene=CANCERS[i].objects.get(gene_id=q)
                         results.append(gene)
                     except:
                         results.append(None)
-                if results==[None]*21:
-                    error=True
-                    return render(request, 'home.html', {'error': error})
+            if in_genes==False and in_gene_ids==False:
+                error=True
+                return render(request, 'home.html', {'error': error})
             missing=False
             if None in results:
                 missing=True

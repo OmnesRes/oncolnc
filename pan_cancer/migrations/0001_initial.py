@@ -11,6 +11,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='ALL_GENE_IDS',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('gene_id', models.CharField(max_length=12)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='ALL_GENES',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('gene', models.CharField(max_length=22)),
+            ],
+        ),
+        migrations.CreateModel(
             name='BLCA',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),

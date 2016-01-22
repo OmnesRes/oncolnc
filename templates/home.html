@@ -1,43 +1,48 @@
 <!DOCTYPE html>
-
 <html lang="en-US">
 <head>
-	<title> {% block title %}OncoLnc{% endblock %} </title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %}OncoLnc{% endblock %} </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<style>
-	body{
-		font-family:"Arial",sans-serif;
-	}
-	.welcome{
-		margin-top:0px;
-		margin-bottom:20px;
-	}
-	.entry{
-		margin-top:70px;
-	}
-	.form-control{
-		font-size:60px;
-		text-align:center;
-		height:100px;
-	}
-	.info {
-		clear:all;
-		font-size:30px;
-		text-align:justify;
-	}
-	p {
-		position:relative;
-		font-size:20px;
-		bottom:230px;
-	}
-
-
-	.tooltip-inner{
+    <style>
+     body{
+        font-family:"Arial",sans-serif;
+    }
+    .welcome{
+        margin-top:0px;
+        margin-bottom:10px;
+    }
+    .entry{
+        margin-top:-40px;
+        margin-bottom:30px;
+       }
+    .form-control{
+        font-size:60px;
+        text-align:center;
+        height:100px;
+    }
+    .info {
+    clear:all;
+    font-size:28px;
+    text-align:justify;
+    }
+    .entry_info {
+    clear:all;
+    font-size:36px;
+    text-align:center;
+    position:relative;
+    top:250px;
+    }
+    p {
+    position:relative;
+    font-size:20px;
+    bottom:230px;
+    }
+    .tooltip-inner{
     max-width: 300px;
     /* If max-width does not work, try using width instead */
     width: 300px; 
@@ -45,50 +50,51 @@
     color:black;
     background-color: white;
     border: 3px solid #337AB7;
-	}
-	.tooltip.top .tooltip-arrow{
-	border-top-color: #337AB7;
-	border-top-width: 6px;
-	}
-
-	</style>
+    }
+    .tooltip.top .tooltip-arrow{
+    border-top-color: #337AB7;
+    border-top-width: 6px;
+    }
+    </style>
 </head>
-
-
-
 <body>
-	<div class="col-sm-12">
-			<div class="col-sm-6 col-sm-push-3 text-center welcome">
-			<h1 style="font-size:60px">Welcome to OncoLnc</h1>
-			</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-8 col-sm-push-2 info">
-			Here you can link TCGA survival data to lncRNA, mRNA, or miRNA expression levels.  To get started simply input either a MiTranscriptome beta lncRNA<sup data-toggle="tooltip" title="Either a Transcript ID or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>, Tier 3 TCGA mRNA<sup data-toggle="tooltip" title="Either a current Entrez Gene ID or HUGO Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup> or miRNA<sup data-toggle="tooltip" title="Either a mature miRBase Accession Number or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>.  More information can be found at this publication, youtube, or Omnes Res. Site is under construction.<br><br>You are about to get data for up to 21 cancers, so it may take some time to load.
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<div class="col-sm-6 col-sm-push-3 text-center entry">
-	    	<form action="/search_results" method="get">
-	    		<div class="form-group">
-	    			<input type="text" class="form-control input-lg" name="q" maxlength=22 placeholder="Your favorite gene">
-	    		</div>
-	    		<button type="submit" class="btn btn-primary btn-lg" style="clear:all">Submit</button>
-	    	</form>
-	    	{% if error %}
-			<p style="color: red;">Please submit a valid gene such as TP53.
-			<br>
-			A list of all genes can be found <a href='/all_genes'>here</a>. A list of all ids can be found <a href='/all_ids'>here</a>.
-			</p>
-			{% endif %}
-			{% if empty %}
-			<p style="color: red;">Please enter something.</p>
-			{% endif %}
-		</div>
-	</div>
-	<div class="col-sm-12 text-center" style="position:absolute;bottom:0">
-		<span style="font-size:20px"><i class="fa fa-copyright"></i> 2016 Omnes Res</span>
-	</div>
+    <div class="col-sm-12">
+        <div class="col-sm-6 col-sm-push-3 text-center welcome">
+            <h1 style="font-size:60px">Welcome to OncoLnc</h1>
+        </div>
+    </div>
+        <div class="col-sm-12">
+            <div class="col-sm-8 col-sm-push-2 info">
+                Here you can link TCGA survival data to lncRNA, mRNA, or miRNA expression levels.  To get started simply input either a MiTranscriptome beta lncRNA<sup data-toggle="tooltip" title="Either a Transcript ID or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>, Tier 3 TCGA mRNA<sup data-toggle="tooltip" title="Either a current Entrez Gene ID or HUGO Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup> or miRNA<sup data-toggle="tooltip" title="Either a mature miRBase Accession Number or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>.  More information can be found at this publication, youtube, or Omnes Res. Site is under construction.
+            </div>
+        </div>
+        <div class="col-sm-12 text-center" style="position:relative;top:450px">
+            <span style="font-size:20px"><i class="fa fa-copyright"></i> 2016 Omnes Res</span>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-8 col-sm-push-2 entry_info">
+                You are about to get data for up to 21 cancers. Please be patient while the table loads, but feel free to get excited!
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-8 col-sm-push-2 text-center entry">
+                <form action="/search_results" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" name="q" maxlength=22 placeholder="Your favorite gene">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" style="clear:all">Submit</button>
+                </form>
+                {% if error %}
+                <p style="color: red;">Please submit a valid gene such as TP53.
+                <br>
+                A list of all genes can be found <a href='/all_genes'>here</a>. A list of all ids can be found <a href='/all_ids'>here</a>.
+                </p>
+                {% endif %}
+                {% if empty %}
+                <p style="color: red;">Please enter something.</p>
+                {% endif %}
+            </div>
+        </div>
 <script>
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();

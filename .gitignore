@@ -28,7 +28,7 @@ var/
 
 # Database
 *.sqlite3
-
+*.sqlite3.gz
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

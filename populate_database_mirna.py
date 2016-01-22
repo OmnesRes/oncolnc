@@ -49,7 +49,6 @@ CANCERS={'BLCA':BLCA,'BRCA':BRCA,'CESC':CESC,'COAD':COAD,'ESCA':ESCA,'GBM':GBM,'
 cancers=['BLCA','BRCA','CESC','COAD','ESCA','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV','PAAD',\
                'READ','SARC','SKCM','STAD','UCEC']
 
-cancers=['GBM']
 import numpy as np
 
 f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\mirna\mature.fa')
@@ -72,10 +71,10 @@ for cancer in cancers:
 ##                                           p_value='%.2e' % float(i[2]),fdr='%.2e' % float(i[2]),rank=str(index+1),\
 ##                                           median=str(round(np.median(expression[i[0]]),2)),mean=str(round(np.mean(expression[i[0]]),2)),\
 ##                                           expression=str([round(k,3) for k in expression[i[0]]]),species='miRNA')
-            temp.append([i[0].upper(),names_to_transcripts[i[0]],round(float(i[1]),3),'%.2e' % float(i[2]),'%.2e' % float(i[2]),\
+            temp.append([i[0].upper(),names_to_transcripts[i[0]],round(float(i[1]),3),'%.2e' % float(i[2]),'%.2e' % float(i[3]),\
                          str(index+1),str(round(np.median(expression[i[0]]),2)),str(round(np.mean(expression[i[0]]),2)),\
                          str([round(k,2) for k in expression[i[0]]]),'miRNA'])
-        w=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\database'+'\\'+cancer+'mirnadata.txt','w')
+        w=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\database'+'\\'+'mirna'+'\\'+cancer+'mirnadata.txt','w')
         for i in temp:
             w.write(str(i))
             w.write('\n')
@@ -101,10 +100,10 @@ for cancer in cancers:
 ##                                           p_value='%.2e' % float(i[2]),fdr='%.2e' % float(i[2]),rank=str(index+1),\
 ##                                           median=str(round(np.median(expression[i[0]]),2)),mean=str(round(np.mean(expression[i[0]]),2)),\
 ##                                           expression=str([round(k,3) for k in expression[i[0]]]),species='miRNA')
-                    temp.append([transcript_to_names[all_aliases[i[0]][0][1]].upper(),all_aliases[i[0]][0][1],round(float(i[1]),3),'%.2e' % float(i[2]),'%.2e' % float(i[2]),\
+                    temp.append([transcript_to_names[all_aliases[i[0]][0][1]].upper(),all_aliases[i[0]][0][1],round(float(i[1]),3),'%.2e' % float(i[2]),'%.2e' % float(i[3]),\
                          str(index+1),str(round(np.median(expression[i[0]]),2)),str(round(np.mean(expression[i[0]]),2)),\
                          str([round(k,2) for k in expression[i[0]]]),'miRNA'])
-        w=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\database'+'\\'+cancer+'mirnadata.txt','w')
+        w=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\database'+'\\'+'mirna'+'\\'+cancer+'mirnadata.txt','w')
         for i in temp:
             w.write(str(i))
             w.write('\n')
@@ -114,10 +113,10 @@ for cancer in cancers:
     del expression
 
 
-for cancer in cancers:
-    f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\mirna\cox'+'\\'+cancer+'\\'+'for_oncolnc.txt')
-    miRNA_PATIENTS.objects.create(cancer=cancer,clinical=f.read())
-
+##for cancer in cancers:
+##    f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\mirna\cox'+'\\'+cancer+'\\'+'for_oncolnc.txt')
+##    miRNA_PATIENTS.objects.create(cancer=cancer,clinical=f.read())
+##
 
 
 

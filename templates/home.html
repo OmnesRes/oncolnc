@@ -14,11 +14,11 @@
 		font-family:"Arial",sans-serif;
 	}
 	.welcome{
-		margin-top:10px;
+		margin-top:0px;
 		margin-bottom:20px;
 	}
 	.entry{
-		margin-top:50px;
+		margin-top:70px;
 	}
 	.form-control{
 		font-size:60px;
@@ -33,7 +33,7 @@
 	p {
 		position:relative;
 		font-size:20px;
-		bottom:200px;
+		bottom:230px;
 	}
 
 
@@ -76,7 +76,10 @@
 	    		<button type="submit" class="btn btn-primary btn-lg" style="clear:all">Submit</button>
 	    	</form>
 	    	{% if error %}
-			<p style="color: red;">Please submit a valid gene such as TP53.</p>
+			<p style="color: red;">Please submit a valid gene such as TP53.
+			<br>
+			A list of all genes can be found <a href='/all_genes'>here</a>. A list of all ids can be found <a href='/all_ids'>here</a>.
+			</p>
 			{% endif %}
 			{% if empty %}
 			<p style="color: red;">Please enter something.</p>

@@ -29,14 +29,13 @@ from pan_cancer.models import mRNA_PATIENTS
 from pan_cancer.models import miRNA_PATIENTS
 from pan_cancer.models import lncRNA_PATIENTS
 
-
+import re
 
 cancers=['BLCA','BRCA','CESC','COAD','ESCA','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV',\
          'PAAD','READ','SARC','SKCM','STAD','UCEC']
 CANCERS={'BLCA':BLCA,'BRCA':BRCA,'CESC':CESC,'COAD':COAD,'ESCA':ESCA,'GBM':GBM,'HNSC':HNSC,'KIRC':KIRC,'KIRP':KIRP,'LAML':LAML,\
          'LGG':LGG,'LIHC':LIHC,'LUAD':LUAD,'LUSC':LUSC,'OV':OV,'PAAD':PAAD,'READ':READ,'SARC':SARC,'SKCM':SKCM,'STAD':STAD,'UCEC':UCEC}
 death_dic={"Alive":0,"Dead":1}
-
 
 
 def plot_kaplan(survtimes):
@@ -133,8 +132,19 @@ def search_results(request):
         return HttpResponse('Please get to this page by clicking the Submit button ;)')
 
 
+def gene_list(request):
+    if request.META.get('HTTP_REFERER',False):
+        myobjects=eval(ALL_GENES.objects.get(gene='all_genes').all_data)
+        return render(request, 'gene_list.html', {'all_genes':myobjects})
+    else:
+        return HttpResponse('Please get to this page by clicking the link ;)')
 
-
+def id_list(request):
+    if request.META.get('HTTP_REFERER',False):
+        myobjects=eval(ALL_GENE_IDS.objects.get(gene_id='all_gene_ids').all_data)
+        return render(request, 'id_list.html', {'all_ids':myobjects})
+    else:
+        return HttpResponse('Please get to this page by clicking the link ;)')
 
 def kaplan(request):
     import re

@@ -3,12 +3,14 @@ from django.db import models
 # Create your models here.
 class ALL_GENES(models.Model):
     gene=models.CharField(max_length=22)
+    all_data=models.TextField(default="empty")
 
     def __unicode__(self):
         return self.gene
     
 class ALL_GENE_IDS(models.Model):
-    gene_id=models.CharField(max_length=12)
+    gene_id=models.CharField(max_length=22)
+    all_data=models.TextField(default="empty")
 
     def __unicode__(self):
         return self.gene_id

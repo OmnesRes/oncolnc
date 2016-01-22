@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
             name='ALL_GENE_IDS',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('gene_id', models.CharField(max_length=12)),
+                ('gene_id', models.CharField(max_length=22)),
+                ('all_data', models.TextField(default=b'empty')),
             ],
         ),
         migrations.CreateModel(
@@ -22,6 +23,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('gene', models.CharField(max_length=22)),
+                ('all_data', models.TextField(default=b'empty')),
             ],
         ),
         migrations.CreateModel(

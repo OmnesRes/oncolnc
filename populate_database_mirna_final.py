@@ -31,15 +31,13 @@ from pan_cancer.models import UCEC
 
 from pan_cancer.models import miRNA_PATIENTS
 
-f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\database\every_gene.txt')
-data=eval(f.read().strip())
-for i in data:
-    ALL_GENES.objects.create(gene=i.upper())
+f=open('every_gene_sorted.txt')
+data=[i.strip() for i in f]
+ALL_GENES.objects.create(gene='all_genes',all_data=str(data))
 
-f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\database\every_gene_id.txt')
-data=eval(f.read().strip())
-for i in data:
-    ALL_GENE_IDS.objects.create(gene_id=i.upper())
+f=open('every_gene_id_sorted.txt')
+data=[i.strip() for i in f]
+ALL_GENE_IDS.objects.create(gene_id='all_gene_ids',all_data=str(data))
 
 
 CANCERS={'BLCA':BLCA,'BRCA':BRCA,'CESC':CESC,'COAD':COAD,'ESCA':ESCA,'GBM':GBM,'HNSC':HNSC,'KIRC':KIRC,\

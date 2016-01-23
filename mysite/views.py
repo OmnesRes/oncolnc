@@ -117,8 +117,8 @@ def id_list(request):
 
 def kaplan(request):
     import re
-    ##from rpy2 import robjects as ro
-    ##ro.r('library(survival)')
+    from rpy2 import robjects as ro
+    ro.r('library(survival)')
     cancer=request.GET.get('cancer','none')
     gene_id=request.GET.get('gene_id','none')
     lower=request.GET.get('lower',False)

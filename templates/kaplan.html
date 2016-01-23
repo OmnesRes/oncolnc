@@ -23,13 +23,18 @@
 	right:270px;
 	font-size:16px;
 	}
-	form{
+	.entry{
 		position:relative;
 		left:30px;
 	}
-	a {
+	button{
+		clear:all;
+		position:relative;
+		left:10px;
+	}
+	.pdf {
 		position: relative;
-		left:500px;
+		right:10px;
 	}
 	img {
 		position: relative;
@@ -60,7 +65,7 @@
 		<span style="font-size: 40px">Kaplan plot for {{ raw }} in {{cancer}}</span>
 		<br>
 		{% if lower %}
-		<form action="" method="get" class="form-inline">
+		<form action="" method="get" class="form-inline entry">
     		<div class="form-group">
     			<input type="text" class="form-control" name="lower" maxlength=3 value= {{ lower }}>
     		</div>
@@ -74,7 +79,7 @@
     		<button type="submit" class="btn btn-primary">Submit</button>
     	</form>
     	{% else %}
-    	<form action="" method="get" class="form-inline">
+    	<form action="" method="get" class="form-inline entry">
     		<div class="form-group">
     			<input type="text" class="form-control" name="lower" maxlength=3 placeholder="Lower Percentile">
     		</div>
@@ -94,10 +99,11 @@
     <div class="col-sm-12 text-center">
     	<p style="font-size:20px">If you make multiple plots be sure to reload the page to ensure an updated image!</p>
     	{% if logrank %}
-		<span class="info">Logrank p-value={{ logrank }} <a href="/download_kaplan" style='center'>Download pdf</a></span>
-		{% else %}
-		<span class="info"><a href="/download_kaplan" style='center'>Download pdf</a></span>
+		<span class="info">Logrank p-value={{ logrank }}</span>
 		{% endif %}
+		<form action="/download_kaplan" class="pdf">
+			<button type="submit" class="btn btn-primary btn" style="clear:all">Go to PDF</button>
+		</form>
 	</div>
     <div class="col-sm-12">
 		<img class ="img-responsive center-block" src='/make_kaplan' width="1000" height='530.4'/>

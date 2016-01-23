@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+
+<head>
+    <title>Cancer</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+
+	.form-control{
+		font-size:20px;
+		text-align:center;
+	}
+	body {font-family: "Arial", sans-serif;
+	}
+	.info {
+	position: relative;
+	top: 10px;
+	z-index: 999;
+	right:270px;
+	font-size:16px;
+	}
+	form{
+		position:relative;
+		left:30px;
+	}
+
+	.alerts{
+		position: relative;
+		right:30px;
+		top:10px;
+		font-size:30px;
+
+	}
+	</style>
+</head>
+
+<body>
+	<div class="col-sm-12 text-center">
+		<span style="font-size: 40px">Enter your cancer of interest and gene below</span>
+		<br>
+    	<form action="/search_results" method="get" class="form-inline">
+    		<div class="form-group">
+    			<input type="text" class="form-control" name="cancer" maxlength=4 placeholder="Cancer">
+    		</div>
+    		<div class="form-group">
+    			<input type="text" class="form-control" name="q" maxlength=22 placeholder="Gene ID/Name">
+    		</div>
+    		<button type="submit" class="btn btn-primary">Submit</button>
+    	</form>
+    </div>
+    <div class="col-sm-12 text-center">
+		<div class="alerts">
+			{% if cancer_error %}
+			<p style="color: red;">Cancer must be either BLCA, BRCA, CESC, COAD, ESCA, GBM, HNSC, KIRC, KIRP, LAML, LGG, LIHC, LUAD, LUSC, OV, PAAD, READ, SARC, SKCM, STAD, UCEC.</p>
+			{% endif %}
+			{% if error %}
+			<p style="color: red;">Please submit a valid gene such as TP53.
+			<br>
+            A list of all genes can be found <a href='/all_genes'>here</a>. A list of all ids can be found <a href='/all_ids'>here</a>.</p>
+			{% endif %}
+			{% if empty %}
+			<p style="color: red;">Please fill in both boxes.</p>
+			{% endif %}
+			{% if empty_result %}
+			<p style="color: red;">There is no data in OncoLnc for {{raw}} in {{cancer}}</p>
+			{% endif %}
+		</div>
+	</div>

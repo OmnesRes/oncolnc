@@ -10,6 +10,7 @@ from pan_cancer.models import ALL_GENE_IDS
 from pan_cancer.models import ONCOLNC_lncRNA
 from pan_cancer.models import ONCOLNC_mRNA
 from pan_cancer.models import ONCOLNC_miRNA
+from pan_cancer.models import KIRC
 
 import time
 
@@ -19,9 +20,10 @@ for i in range(10):
 ##    result=ONCOLNC_miRNA.objects.get(gene='hsa-miR-130b-3p'.upper(),cancer='KIRC')
 ##    result=ONCOLNC_mRNA.objects.get(gene='donson'.upper(),cancer='KIRC')
 ##    results=ONCOLNC_mRNA.objects.filter(gene='donson'.upper())
-    results=ONCOLNC_miRNA.objects.filter(gene='hsa-miR-130b-3p'.upper())
-    for result in results:
-        result
+##    results=ONCOLNC_miRNA.objects.filter(gene='hsa-miR-130b-3p'.upper())
+##    for result in results:
+##        result
+    KIRC.objects.get(gene='donson'.upper())
     end=time.time()
     print end-start
 

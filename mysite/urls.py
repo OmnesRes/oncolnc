@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^download_kaplan/$', views.download_kaplan),
     url(r'^all_genes/$', views.gene_list),
     url(r'^all_ids/$', views.id_list),
+    url(r'^cancer/$', views.cancer),
     
     
 ]

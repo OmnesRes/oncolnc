@@ -11,10 +11,39 @@ from pan_cancer.models import mRNA_PATIENTS
 from pan_cancer.models import miRNA_PATIENTS
 from pan_cancer.models import lncRNA_PATIENTS
 
+from pan_cancer.models import BLCA
+from pan_cancer.models import BLCA
+from pan_cancer.models import BRCA
+from pan_cancer.models import CESC
+from pan_cancer.models import COAD
+from pan_cancer.models import ESCA
+from pan_cancer.models import GBM
+from pan_cancer.models import HNSC
+from pan_cancer.models import KIRC
+from pan_cancer.models import KIRP
+from pan_cancer.models import LAML
+from pan_cancer.models import LGG
+from pan_cancer.models import LIHC
+from pan_cancer.models import LUAD
+from pan_cancer.models import LUSC
+from pan_cancer.models import OV
+from pan_cancer.models import PAAD
+from pan_cancer.models import READ
+from pan_cancer.models import SARC
+from pan_cancer.models import SKCM
+from pan_cancer.models import STAD
+from pan_cancer.models import UCEC
+
+
 import re
 
 cancers=['BLCA','BRCA','CESC','COAD','ESCA','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV',\
          'PAAD','READ','SARC','SKCM','STAD','UCEC']
+
+CANCERS={'BLCA':BLCA,'BRCA':BRCA,'CESC':CESC,'COAD':COAD,'ESCA':ESCA,'GBM':GBM,'HNSC':HNSC,'KIRC':KIRC,\
+         'KIRP':KIRP,'LAML':LAML,'LGG':LGG,'LIHC':LIHC,'LUAD':LUAD,'LUSC':LUSC,'OV':OV,'PAAD':PAAD,\
+         'READ':READ,'SARC':SARC,'SKCM':SKCM,'STAD':STAD,'UCEC':UCEC}
+
 death_dic={"Alive":0,"Dead":1}
 
 mi_conflicts={'UXT-AS1': 'T374161', 'CDKN2B-AS1': 'T356525', 'LINC00896': 'T229471', 'DCTN1-AS1': 'T192039', 'KCNQ1DN': 'T053312', 'INHBA-AS1': 'T322202', 'LINC00957': 'T322579', 'PACRG-AS1': 'T314859', 'LINC00310': 'T225427', 'LINC00938': 'T077318', 'LHFPL3-AS2': 'T330598', 'HAS2-AS1': 'T350375', 'TPT1-AS1': 'T093996', 'SPATA41': 'T123512', 'FAM13A-AS1': 'T268004', 'KCNQ1OT1': 'T053301', 'FLVCR1-AS1': 'T030165', 'ST7-AS1': 'T331729', 'FBXL19-AS1': 'T130509', 'TP53TG1': 'T327859', 'ZNF674-AS1': 'T373973', 'TMEM254-AS1': 'T044971', 'GLIS3-AS1': 'T355099', 'LINC00526': 'T158027', 'PSMG3-AS1': 'T317341', 'ZNF252P-AS1': 'T354539', 'LINC00323': 'T226507', 'IDI2-AS1': 'T035325', 'JHDM1D-AS1': 'T334335', 'PDCD4-AS1': 'T048595', 'BCDIN3D-AS1': 'T078256', 'MIR155HG': 'T224489', 'LINC01144': 'T010080', 'EMX2OS': 'T049262', 'LINC00606': 'T237949', 'LINC00092': 'T363122', 'FTX': 'T376410', 'USP27X-AS1': 'T374751', 'TMPO-AS1': 'T084753', 'LINC00494': 'T219315', 'LINC00094': 'T368432', 'LINC00654': 'T213242', 'TAPT1-AS1': 'T261843', 'PRAC2': 'T149878', 'KRTAP5-AS1': 'T052785', 'ILF3-AS1': 'T168322', 'LINC00599': 'T338703', 'JMJD1C-AS1': 'T042844', 'GNAS-AS1': 'T221110', 'LINC00174': 'T325600', 'DICER1-AS1': 'T109603', 'NEAT1': 'T061237', 'LINC01018': 'T278454', 'AFAP1-AS1': 'T260658', 'RPL34-AS1': 'T269318', 'LINC00114': 'T226069', 'HCG11': 'T299308', 'ADORA2A-AS1': 'T231001', 'LINC00261': 'T215042', 'MESTIT1': 'T333265', 'LINC00240': 'T299438', 'BDNF-AS': 'T056354', 'LINC01003': 'T336230', 'SNAI3-AS1': 'T138265', 'SNHG9': 'T125200', 'SOX2-OT': 'T255513'}
@@ -57,7 +86,8 @@ def loop(newsurv,y,h_coords,v_coords,lost):
 def home(request):
     return render(request, 'home.html')
 
-
+def cancer(request):
+    return render(request, 'cancer.html')
 
 
 def search_results(request):
@@ -66,8 +96,17 @@ def search_results(request):
         mi_conflict=False
         name_conflict=False
         if 'q' in request.GET:
+            cancer=False
+            if 'cancer' in request.GET:
+                cancer=request.GET['cancer'].strip().upper()
+                if cancer=='':
+                    return render(request, 'cancer.html', {'empty': True})
+                if cancer not in cancers:
+                    return render(request, 'cancer.html', {'cancer_error': True})
             raw=request.GET['q'].strip()
             if raw=='':
+                if 'cancer' in request.GET:
+                    return render(request, 'cancer.html', {'empty': True})
                 return render(request, 'home.html', {'empty': True})
             q=request.GET['q'].strip().upper()
             in_mrna_genes=False
@@ -110,31 +149,54 @@ def search_results(request):
                                     in_lncrna_gene_ids=True
                                     del lncrna_ids
             if in_mrna_genes==True:
-                results=ONCOLNC_mRNA.objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                if cancer:
+                    results=CANCERS[cancer].objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean')
+                else:
+                    results=ONCOLNC_mRNA.objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
                 species='mRNA'
             elif in_mrna_gene_ids==True:
-                results=ONCOLNC_mRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                if cancer:
+                    results=CANCERS[cancer].objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean')
+                else:
+                    results=ONCOLNC_mRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
                 species='mRNA'
             elif in_mirna_genes==True:
-                results=ONCOLNC_miRNA.objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                if cancer:
+                    results=ONCOLNC_miRNA.objects.filter(gene=q,cancer=cancer).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                else:
+                    results=ONCOLNC_miRNA.objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
                 species='miRNA'
             elif in_mirna_gene_ids==True:
-                results=ONCOLNC_miRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                if cancer:
+                    results=ONCOLNC_miRNA.objects.filter(gene_id=q,cancer=cancer).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                else:
+                    results=ONCOLNC_miRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
                 species='miRNA'
             elif in_lncrna_genes==True:
-                results=ONCOLNC_lncRNA.objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                if cancer:
+                    results=ONCOLNC_lncRNA.objects.filter(gene=q,cancer=cancer).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                else:
+                    results=ONCOLNC_lncRNA.objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
                 species='lncRNA'
             elif in_lncrna_gene_ids==True:
-                results=ONCOLNC_lncRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                if cancer:
+                    results=ONCOLNC_lncRNA.objects.filter(gene_id=q,cancer=cancer).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                else:
+                    results=ONCOLNC_lncRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
                 species='lncRNA'
             else:
                 error=True
-                return render(request, 'home.html', {'error': error})
+                if cancer:
+                    return render(request, 'cancer.html', {'error': error,'cancer_error':False})
+                else:
+                    return render(request, 'home.html', {'error': error})
             missing=False
-            if len(results)<21:
+            if len(results)<21 and not cancer:
                 missing=True
+            if cancer and len(results)==0:
+                return render(request, 'cancer.html', {'error': False,'cancer_error':False,'empty_result':True,'raw':raw,'cancer':cancer})
             return render(request, 'search_results.html',
-                          {'results':results, 'cancers': cancers,'missing':missing,'raw':raw,'name_conflict':name_conflict,'mi_conflict':mi_conflict,'species':species})
+                          {'results':results, 'cancer':cancer,'cancers': cancers,'missing':missing,'raw':raw,'name_conflict':name_conflict,'mi_conflict':mi_conflict,'species':species})
         else:
             return render(request, 'home.html', {'error': error})
     else:
@@ -182,7 +244,7 @@ def kaplan(request):
             else:
                 if species=='mRNA':
                     patients=eval(mRNA_PATIENTS.objects.get(cancer=cancer).clinical)
-                    result = ONCOLNC_mRNA.objects.get(gene_id=gene_id,cancer=cancer)
+                    result = CANCERS[cancer].objects.get(gene_id=gene_id)
                 elif species=='miRNA':
                     patients=eval(miRNA_PATIENTS.objects.get(cancer=cancer).clinical)
                     result = ONCOLNC_miRNA.objects.get(gene_id=gene_id,cancer=cancer)
@@ -243,7 +305,7 @@ def make_kaplan(request):
         Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
         if Species=='mRNA':
             patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-            result = ONCOLNC_mRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+            result = CANCERS[Cancer].objects.get(gene_id=Gene_id)
         elif Species=='miRNA':
             patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
             result = ONCOLNC_miRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
@@ -349,7 +411,7 @@ def download_kaplan(request):
         Species=request.META['HTTP_REFERER'].split('species=')[1]
         if Species=='mRNA':
             patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-            result = ONCOLNC_mRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+            result = CANCERS[Cancer].objects.get(gene_id=Gene_id)
         elif Species=='miRNA':
             patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
             result = ONCOLNC_miRNA.objects.get(gene_id=Gene_id,cancer=Cancer)

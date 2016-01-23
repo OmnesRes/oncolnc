@@ -15,7 +15,7 @@ class ALL_GENE_IDS(models.Model):
     def __unicode__(self):
         return self.gene_id
 
-class ONCOLNC(models.Model):
+class ONCOLNC_miRNA(models.Model):
     cancer=models.CharField(max_length=4)
     gene=models.CharField(max_length=22)
     gene_id=models.CharField(max_length=12)
@@ -26,12 +26,40 @@ class ONCOLNC(models.Model):
     mean=models.CharField(max_length=6)
     median=models.CharField(max_length=6)
     expression=models.TextField(default="empty")
-    species=models.CharField(max_length=6)
 
     def __unicode__(self):
         return self.gene
 
 
+class ONCOLNC_mRNA(models.Model):
+    cancer=models.CharField(max_length=4)
+    gene=models.CharField(max_length=22)
+    gene_id=models.CharField(max_length=12)
+    Cox=models.CharField(max_length=6)
+    p_value=models.CharField(max_length=7)
+    fdr=models.CharField(max_length=7)
+    rank=models.CharField(max_length=6)
+    mean=models.CharField(max_length=6)
+    median=models.CharField(max_length=6)
+    expression=models.TextField(default="empty")
+
+    def __unicode__(self):
+        return self.gene
+
+class ONCOLNC_lncRNA(models.Model):
+    cancer=models.CharField(max_length=4)
+    gene=models.CharField(max_length=22)
+    gene_id=models.CharField(max_length=12)
+    Cox=models.CharField(max_length=6)
+    p_value=models.CharField(max_length=7)
+    fdr=models.CharField(max_length=7)
+    rank=models.CharField(max_length=6)
+    mean=models.CharField(max_length=6)
+    median=models.CharField(max_length=6)
+    expression=models.TextField(default="empty")
+
+    def __unicode__(self):
+        return self.gene
 
 
 class mRNA_PATIENTS(models.Model):

@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='ONCOLNC',
+            name='ONCOLNC_lncRNA',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('cancer', models.CharField(max_length=4)),
@@ -64,7 +64,38 @@ class Migration(migrations.Migration):
                 ('mean', models.CharField(max_length=6)),
                 ('median', models.CharField(max_length=6)),
                 ('expression', models.TextField(default=b'empty')),
-                ('species', models.CharField(max_length=6)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='ONCOLNC_miRNA',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('cancer', models.CharField(max_length=4)),
+                ('gene', models.CharField(max_length=22)),
+                ('gene_id', models.CharField(max_length=12)),
+                ('Cox', models.CharField(max_length=6)),
+                ('p_value', models.CharField(max_length=7)),
+                ('fdr', models.CharField(max_length=7)),
+                ('rank', models.CharField(max_length=6)),
+                ('mean', models.CharField(max_length=6)),
+                ('median', models.CharField(max_length=6)),
+                ('expression', models.TextField(default=b'empty')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='ONCOLNC_mRNA',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('cancer', models.CharField(max_length=4)),
+                ('gene', models.CharField(max_length=22)),
+                ('gene_id', models.CharField(max_length=12)),
+                ('Cox', models.CharField(max_length=6)),
+                ('p_value', models.CharField(max_length=7)),
+                ('fdr', models.CharField(max_length=7)),
+                ('rank', models.CharField(max_length=6)),
+                ('mean', models.CharField(max_length=6)),
+                ('median', models.CharField(max_length=6)),
+                ('expression', models.TextField(default=b'empty')),
             ],
         ),
     ]

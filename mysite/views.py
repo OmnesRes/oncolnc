@@ -152,13 +152,21 @@ def search_results(request):
                 if cancer:
                     results=CANCERS[cancer].objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean')
                 else:
-                    results=ONCOLNC_mRNA.objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                    result=ONCOLNC_mRNA.objects.get(gene=q)
+                    results=[eval(result.BLCA),eval(result.BRCA),eval(result.CESC),eval(result.COAD),eval(result.ESCA),eval(result.GBM),\
+                    eval(result.HNSC),eval(result.KIRC),eval(result.KIRP),eval(result.LAML),eval(result.LGG),eval(result.LIHC),\
+                    eval(result.LUAD),eval(result.LUSC),eval(result.OV),eval(result.PAAD),eval(result.READ),eval(result.SARC),eval(result.SKCM),\
+                    eval(result.STAD),eval(result.UCEC)]
                 species='mRNA'
             elif in_mrna_gene_ids==True:
                 if cancer:
                     results=CANCERS[cancer].objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean')
                 else:
-                    results=ONCOLNC_mRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
+                    result=ONCOLNC_mRNA.objects.get(gene_id=q)
+                    results=[eval(result.BLCA),eval(result.BRCA),eval(result.CESC),eval(result.COAD),eval(result.ESCA),eval(result.GBM),\
+                    eval(result.HNSC),eval(result.KIRC),eval(result.KIRP),eval(result.LAML),eval(result.LGG),eval(result.LIHC),\
+                    eval(result.LUAD),eval(result.LUSC),eval(result.OV),eval(result.PAAD),eval(result.READ),eval(result.SARC),eval(result.SKCM),\
+                    eval(result.STAD),eval(result.UCEC)]
                 species='mRNA'
             elif in_mirna_genes==True:
                 if cancer:
@@ -193,6 +201,8 @@ def search_results(request):
             missing=False
             if len(results)<21 and not cancer:
                 missing=True
+            if '' in results and not cancer:
+                missing=True
             if cancer and len(results)==0:
                 return render(request, 'cancer.html', {'error': False,'cancer_error':False,'empty_result':True,'raw':raw,'cancer':cancer})
             return render(request, 'search_results.html',
@@ -219,8 +229,8 @@ def id_list(request):
 
 def kaplan(request):
     import re
-    from rpy2 import robjects as ro
-    ro.r('library(survival)')
+    ##from rpy2 import robjects as ro
+    ##ro.r('library(survival)')
     cancer=request.GET.get('cancer','none')
     gene_id=request.GET.get('gene_id','none')
     lower=request.GET.get('lower',False)

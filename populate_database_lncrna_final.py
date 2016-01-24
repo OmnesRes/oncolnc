@@ -16,6 +16,7 @@ cancers=['BLCA','BRCA','CESC','COAD','GBM','HNSC','KIRC','KIRP','LAML','LGG','LI
 
 
 for cancer in cancers:
+    print cancer
     f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\database\lncrna'+'\\'+cancer+'lncrnadata.txt')
     data=[eval(i.strip()) for i in f]
     for j in data:

@@ -32,16 +32,29 @@ class ONCOLNC_miRNA(models.Model):
 
 
 class ONCOLNC_mRNA(models.Model):
-    cancer=models.CharField(max_length=4)
     gene=models.CharField(max_length=22)
     gene_id=models.CharField(max_length=12)
-    Cox=models.CharField(max_length=6)
-    p_value=models.CharField(max_length=7)
-    fdr=models.CharField(max_length=7)
-    rank=models.CharField(max_length=6)
-    mean=models.CharField(max_length=6)
-    median=models.CharField(max_length=6)
-    expression=models.TextField(default="empty")
+    BLCA=models.TextField(default="empty")
+    BRCA=models.TextField(default="empty")
+    CESC=models.TextField(default="empty")
+    COAD=models.TextField(default="empty")
+    ESCA=models.TextField(default="empty")
+    GBM=models.TextField(default="empty")
+    HNSC=models.TextField(default="empty")
+    KIRC=models.TextField(default="empty")
+    KIRP=models.TextField(default="empty")
+    LAML=models.TextField(default="empty")
+    LGG=models.TextField(default="empty")
+    LIHC=models.TextField(default="empty")
+    LUAD=models.TextField(default="empty")
+    LUSC=models.TextField(default="empty")
+    OV=models.TextField(default="empty")
+    PAAD=models.TextField(default="empty")
+    READ=models.TextField(default="empty")
+    SARC=models.TextField(default="empty")
+    SKCM=models.TextField(default="empty")
+    STAD=models.TextField(default="empty")
+    UCEC=models.TextField(default="empty")
 
     def __unicode__(self):
         return self.gene

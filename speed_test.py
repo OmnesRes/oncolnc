@@ -23,7 +23,9 @@ for i in range(10):
 ##    results=ONCOLNC_miRNA.objects.filter(gene='hsa-miR-130b-3p'.upper())
 ##    for result in results:
 ##        result
-    KIRC.objects.get(gene='donson'.upper())
+    result=ONCOLNC_mRNA.objects.get(gene='donson'.upper())
+    for j in range(100):
+        result.KIRC
     end=time.time()
     print end-start
 

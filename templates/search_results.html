@@ -77,26 +77,49 @@
           </td>
         </tr>
         {% else %}
-        {% for result in results|dictsort:"cancer" %}
-        <tr>
-          <td>{{result.cancer}}</td>
-          <td>{{result.Cox}}</td>
-          <td>{{ result.p_value }}</td>
-          <td>{{ result.fdr }}</td>
-          <td>{{ result.rank }}</td>
-          <td>{{ result.median }}</td>
-          <td>{{ result.mean }}</td>
-          <td>
-            <form action='/kaplan' method='get' target='_blank'>
-              <input type="hidden" name="cancer" value={{ result.cancer }}>
-              <input type="hidden" name="gene_id" value={{ result.gene_id }}>
-              <input type="hidden" name="raw" value={{ raw }}>
-              <input type="hidden" name="species" value={{ species }}>
-              <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
+          {% if species != 'mRNA' %}
+            {% for result in results|dictsort:"cancer" %}
+            <tr>
+              <td>{{result.cancer}}</td>
+              <td>{{result.Cox}}</td>
+              <td>{{ result.p_value }}</td>
+              <td>{{ result.fdr }}</td>
+              <td>{{ result.rank }}</td>
+              <td>{{ result.median }}</td>
+              <td>{{ result.mean }}</td>
+              <td>
+                <form action='/kaplan' method='get' target='_blank'>
+                  <input type="hidden" name="cancer" value={{ result.cancer }}>
+                  <input type="hidden" name="gene_id" value={{ result.gene_id }}>
+                  <input type="hidden" name="raw" value={{ raw }}>
+                  <input type="hidden" name="species" value={{ species }}>
+                  <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            {% for result in results %}
+            <tr>
+              <td>{{result.cancer}}</td>
+              <td>{{result.cox}}</td>
+              <td>{{ result.p_value }}</td>
+              <td>{{ result.fdr }}</td>
+              <td>{{ result.rank }}</td>
+              <td>{{ result.median }}</td>
+              <td>{{ result.mean }}</td>
+              <td>
+                <form action='/kaplan' method='get' target='_blank'>
+                  <input type="hidden" name="cancer" value={{ result.cancer }}>
+                  <input type="hidden" name="gene_id" value={{ result.gene_id }}>
+                  <input type="hidden" name="raw" value={{ raw }}>
+                  <input type="hidden" name="species" value={{ species }}>
+                  <button type="submit" class="btn-xsm btn-primary">Yes Please!</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+        {% endif %}
         {% endif %}
       </tbody>
     </table>

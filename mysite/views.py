@@ -50,6 +50,13 @@ mi_conflicts={'UXT-AS1': 'T374161', 'CDKN2B-AS1': 'T356525', 'LINC00896': 'T2294
 
 name_conflicts={'NAA38': ['84316', '51691'], 'SLC35E2': ['9906', '728661']}
 
+def myeval(mystring):
+    if mystring=='':
+        return ''
+    else:
+        return eval(mystring)
+
+
 def plot_kaplan(survtimes):
     h_coords=[]
     v_coords=[]
@@ -154,10 +161,10 @@ def search_results(request):
                     results=CANCERS[cancer].objects.filter(gene=q).values('p_value','Cox','median','gene_id','fdr','rank','mean')
                 else:
                     result=ONCOLNC_mRNA.objects.get(gene=q)
-                    results=[eval(result.BLCA),eval(result.BRCA),eval(result.CESC),eval(result.COAD),eval(result.ESCA),eval(result.GBM),\
-                    eval(result.HNSC),eval(result.KIRC),eval(result.KIRP),eval(result.LAML),eval(result.LGG),eval(result.LIHC),\
-                    eval(result.LUAD),eval(result.LUSC),eval(result.OV),eval(result.PAAD),eval(result.READ),eval(result.SARC),eval(result.SKCM),\
-                    eval(result.STAD),eval(result.UCEC)]
+                    results=[myeval(result.BLCA),myeval(result.BRCA),myeval(result.CESC),myeval(result.COAD),myeval(result.ESCA),myeval(result.GBM),\
+                    myeval(result.HNSC),myeval(result.KIRC),myeval(result.KIRP),myeval(result.LAML),myeval(result.LGG),myeval(result.LIHC),\
+                    myeval(result.LUAD),myeval(result.LUSC),myeval(result.OV),myeval(result.PAAD),myeval(result.READ),myeval(result.SARC),\
+                    myeval(result.SKCM),myeval(result.STAD),myeval(result.UCEC)]
                     mRNA_gene_id=result.gene_id
                 species='mRNA'
             elif in_mrna_gene_ids==True:

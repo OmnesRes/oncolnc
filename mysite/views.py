@@ -209,7 +209,7 @@ def search_results(request):
             if cancer and len(results)==0:
                 return render(request, 'cancer.html', {'error': False,'cancer_error':False,'empty_result':True,'raw':raw,'cancer':cancer})
             return render(request, 'search_results.html',
-                          {'gene_id':mRNA_gene_id 'results':results, 'cancer':cancer,'cancers': cancers,'missing':missing,'raw':raw,'name_conflict':name_conflict,'mi_conflict':mi_conflict,'species':species})
+                          {'gene_id':mRNA_gene_id, 'results':results, 'cancer':cancer,'cancers': cancers,'missing':missing,'raw':raw,'name_conflict':name_conflict,'mi_conflict':mi_conflict,'species':species})
         else:
             return render(request, 'home.html', {'error': error})
     else:

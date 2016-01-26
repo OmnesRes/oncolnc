@@ -525,3 +525,46 @@ def download_kaplan(request):
         gc.collect()
         return response
 
+
+def download_excel(request):
+    import StringIO
+    import csv
+    message='Please get to this page by clicking the PLOT button ;)'
+    if not request.META.get('HTTP_REFERER',False):
+        return HttpResponse(message)
+    else:
+        Cancer=request.META['HTTP_REFERER'].split('cancer=')[1].split('&')[0]
+        Gene_id=request.META['HTTP_REFERER'].split('gene_id=')[1].split('&')[0]
+        Lower=request.META['HTTP_REFERER'].split('lower=')[1].split('&')[0]
+        Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
+        Species=request.META['HTTP_REFERER'].split('species=')[1]
+        if Species=='mRNA':
+            patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+            result = CANCERS[Cancer].objects.get(gene_id=Gene_id)
+        elif Species=='miRNA':
+            patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+            result = ONCOLNC_miRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+        else:
+            patients=eval(lncRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+            result = ONCOLNC_lncRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+        expression=eval(result.expression)
+        data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
+        data.sort()
+        bottom=int(len(data)*int(Lower)/100.0)
+        top=int(len(data)*int(Upper)/100.0)*-1
+        bottom_patients=[i[1]+[i[0]]+['Low'] for i in data[:bottom]]
+        top_patients=[i[1]+[i[0]]+['High'] for i in data[top:]]
+        if top==0:
+            top_patients=[]
+        else:
+            top_patients=[i[1] for i in data[top:]]
+        first_line=[['Patient','Days','Status','Expression','Group']]
+        all_data=first_line+bottom_patients+top_patients
+        output=StringIO.StringIO()
+        w= csv.writer(output)
+        for i in all_data:
+            w.writerow(i)
+        output.seek(0)
+        response=HttpResponse(output.read(),content_type='application/ms-excel')
+        response['Content-Disposition'] = 'filename=%s_%s_%s_%s.csv' % (Cancer,Gene_id,Lower,Upper)
+        return response

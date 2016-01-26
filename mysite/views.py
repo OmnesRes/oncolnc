@@ -553,11 +553,10 @@ def download_excel(request):
         bottom=int(len(data)*int(Lower)/100.0)
         top=int(len(data)*int(Upper)/100.0)*-1
         bottom_patients=[i[1]+[i[0]]+['Low'] for i in data[:bottom]]
-        top_patients=[i[1]+[i[0]]+['High'] for i in data[top:]]
         if top==0:
             top_patients=[]
         else:
-            top_patients=[i[1] for i in data[top:]]
+            top_patients=[i[1]+[i[0]]+['High'] for i in data[top:]]
         first_line=[['Patient','Days','Status','Expression','Group']]
         all_data=first_line+bottom_patients+top_patients
         output=StringIO.StringIO()

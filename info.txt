@@ -1,0 +1,10 @@
+to create the database follow these steps:
+delete previous database including migrations
+run populate_database_lncrna to create text files if not already done
+run populate_database_mirna to create text files if not already done
+run table_creation_oncolnc in table1 to create text files if not already done
+
+run populate_database_mirna_final
+run populate_database_lncrna_final
+run populate_database_mrna_final
+run populate_database_mrna_final2

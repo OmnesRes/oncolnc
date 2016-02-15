@@ -17,9 +17,10 @@ conflicts={'UXT-AS1': 'T374161', 'CDKN2B-AS1': 'T356525', 'LINC00896': 'T229471'
 
 
 
-cancers=['BLCA','BRCA','CESC','COAD','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV',\
-               'READ','SKCM','STAD','UCEC']
+##cancers=['BLCA','BRCA','CESC','COAD','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV',\
+##               'READ','SKCM','STAD','UCEC']
 
+cancers=['BRCA','UCEC']
 import numpy as np
 f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\lncrna\mitranscriptome.gtf\mitranscriptome.gtf\mitranscriptome.v2.gtf\mitranscriptome.v2.gtf')
 transcript_dict={}

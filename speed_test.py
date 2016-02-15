@@ -25,7 +25,7 @@ for i in range(10):
 ##        result
     result=ONCOLNC_mRNA.objects.get(gene='donson'.upper())
     for j in range(100):
-        result.KIRC
+        result=ONCOLNC_mRNA.objects.get(gene='donson'.upper())
     end=time.time()
     print end-start
 

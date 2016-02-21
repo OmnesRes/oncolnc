@@ -250,23 +250,23 @@ def kaplan(request):
     if request.META.get('HTTP_REFERER',False):
         if lower and upper:
             if not re.search('^[0-9]+$',lower) or not re.search('^[0-9]+$',upper):
-                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'lower':lower,'upper':upper,\
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'species':species,'lower':lower,'upper':upper,\
                                                        'addition_error':False,'input_error':True,'empty_error':False,\
                                                        'upper_error':False})
             elif int(lower)+int(upper)>100:
-                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'lower':lower, 'upper':upper,\
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'species':species,'lower':lower, 'upper':upper,\
                                                        'addition_error':True,'input_error':False,'empty_error':False,\
                                                        'upper_error':False})
             elif int(upper)==100:
-                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw, 'lower':lower, 'upper':upper,\
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'species':species,'lower':lower, 'upper':upper,\
                                                        'addition_error':False,'input_error':False,'empty_error':False,\
                                                        'upper_error':True})
             elif int(upper)==0 and int(lower)!=100:
-                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw, 'lower':lower, 'upper':upper,\
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'species':species,'lower':lower, 'upper':upper,\
                                                        'addition_error':False,'input_error':False,'empty_error':False,\
                                                        'upper_error':False,'upper_zero':True})
             elif int(lower)==0:
-                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw, 'lower':lower, 'upper':upper,\
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw,'species':species,'lower':lower, 'upper':upper,\
                                                        'addition_error':False,'input_error':False,'empty_error':False,\
                                                        'upper_error':False,'lower_zero':True})
             else:

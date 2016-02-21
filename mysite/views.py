@@ -261,6 +261,14 @@ def kaplan(request):
                 return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw, 'lower':lower, 'upper':upper,\
                                                        'addition_error':False,'input_error':False,'empty_error':False,\
                                                        'upper_error':True})
+            elif int(upper)==0 and int(lower)!=100:
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw, 'lower':lower, 'upper':upper,\
+                                                       'addition_error':False,'input_error':False,'empty_error':False,\
+                                                       'upper_error':False,'upper_zero':True})
+            elif int(lower)==0:
+                return render(request, 'kaplan.html', {'gene_id': gene_id,'cancer':cancer,'raw':raw, 'lower':lower, 'upper':upper,\
+                                                       'addition_error':False,'input_error':False,'empty_error':False,\
+                                                       'upper_error':False,'lower_zero':True})
             else:
                 if species=='mRNA':
                     patients=eval(mRNA_PATIENTS.objects.get(cancer=cancer).clinical)

@@ -137,7 +137,7 @@
     	{% endif %}
     </div>
 
-    {% if lower and not addition_error and not input_error and not empty_error and not upper_error%}
+    {% if lower and not addition_error and not input_error and not empty_error and not upper_error and not upper_zero and not lower_zero %}
     <div class="col-sm-12 text-center">
     	<p style="font-size:20px">If you make multiple plots be sure to reload the page to ensure an updated image!</p>
     	{% if logrank %}
@@ -180,6 +180,12 @@
 			{% endif %}
 			{% if upper_error %}
 			<p style="color: red;">Upper cannot have a value of 100, sorry.  If you want the whole dataset make lower 100.</p>
+			{% endif %}
+			{% if upper_zero %}
+			<p style="color: red;">Upper cannot have a value of 0 unless lower is 100, sorry.</p>
+			{% endif %}
+			{% if lower_zero %}
+			<p style="color: red;">Lower cannot have a value of 0, sorry.</p>
 			{% endif %}
 		</div>
 	</div>

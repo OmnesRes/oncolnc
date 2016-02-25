@@ -21,7 +21,7 @@ from mysite import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.home),
-    url(r'^search_results$', views.search_results),
+    url(r'^search_results/$', views.search_results),
     url(r'^kaplan/$', views.kaplan),
     url(r'^make_kaplan/$', views.make_kaplan),
     url(r'^download_kaplan/$', views.download_kaplan),

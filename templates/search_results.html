@@ -123,7 +123,7 @@ UCEC: Uterine Corpus Endometrial Carcinoma
           <td>{{ results.0.median }}</td>
           <td>{{ results.0.mean }}</td>
           <td>
-            <form action='/kaplan' method='get' target='_blank'>
+            <form action='/kaplan/' method='get' target='_blank'>
               <input type="hidden" name="cancer" value={{ cancer }}>
               <input type="hidden" name="gene_id" value={{ results.0.gene_id }}>
               <input type="hidden" name="raw" value={{ raw }}>
@@ -144,7 +144,7 @@ UCEC: Uterine Corpus Endometrial Carcinoma
               <td>{{ result.median }}</td>
               <td>{{ result.mean }}</td>
               <td>
-                <form action='/kaplan' method='get' target='_blank'>
+                <form action='/kaplan/' method='get' target='_blank'>
                   <input type="hidden" name="cancer" value={{ result.cancer }}>
                   <input type="hidden" name="gene_id" value={{ result.gene_id }}>
                   <input type="hidden" name="raw" value={{ raw }}>
@@ -166,7 +166,7 @@ UCEC: Uterine Corpus Endometrial Carcinoma
                 <td>{{ result.median }}</td>
                 <td>{{ result.mean }}</td>
                 <td>
-                  <form action='/kaplan' method='get' target='_blank'>
+                  <form action='/kaplan/' method='get' target='_blank'>
                     <input type="hidden" name="cancer" value={{ result.cancer }}>
                     <input type="hidden" name="gene_id" value={{ gene_id }}>
                     <input type="hidden" name="raw" value={{ raw }}>

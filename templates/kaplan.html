@@ -143,7 +143,7 @@
     	{% if logrank %}
 		<span class="info">Logrank p-value={{ logrank }}</span>
 		{% endif %}
-		<form action="/download_kaplan" class="pdf">
+		<form action="/download_kaplan/" class="pdf">
 			<button type="submit" class="btn btn-primary btn" style="clear:all">Go to PDF</button>
 		</form>
 	</div>
@@ -152,7 +152,7 @@
 	</div>
 	<div class="col-sm-12 text-center">
 		<p style="font-size:20px" class='excel'>For an excel file of this data</p>
-		<form action="/download_excel" class='excel'>
+		<form action="/download_excel/" class='excel'>
 				<button type="submit" class="btn btn-primary btn" style="clear:all">Click Here</button>
 		</form>
 	</div>

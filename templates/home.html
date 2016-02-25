@@ -108,12 +108,12 @@ SARC: Sarcoma
 SKCM: Skin Cutaneous Melanoma
 STAD: Stomach adenocarcinoma
 UCEC: Uterine Corpus Endometrial Carcinoma
-"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>.  Too much data?  Click <a href='/cancer'>here</a> for a single cancer search.
+"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>.  Too much data?  Click <a href='/cancer/'>here</a> for a single cancer search.
             </div>
         </div>
         <div class="col-sm-12">
             <div class="col-sm-8 col-sm-push-2 text-center entry">
-                <form action="/search_results" method="get">
+                <form action="/search_results/" method="get">
                     <div class="form-group">
                         <input type="text" class="form-control input-lg" name="q" maxlength=22 placeholder="Your favorite gene">
                     </div>
@@ -122,7 +122,7 @@ UCEC: Uterine Corpus Endometrial Carcinoma
                 {% if error %}
                 <p style="color: red;">Please submit a valid gene such as TP53.
                 <br>
-                A list of all genes can be found <a href='/all_genes'>here</a>. A list of all ids can be found <a href='/all_ids'>here</a>.
+                A list of all genes can be found <a href='/all_genes/'>here</a>. A list of all ids can be found <a href='/all_ids/'>here</a>.
                 </p>
                 {% endif %}
                 {% if empty %}

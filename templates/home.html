@@ -128,6 +128,12 @@ UCEC: Uterine Corpus Endometrial Carcinoma
                 {% if empty %}
                 <p style="color: red;">Please enter something.</p>
                 {% endif %}
+                {% if suggestion %}
+                <p style="color: red;">{{raw}} is a synonym for {{suggestion}}.  Is that the gene you want?
+                <br>
+                A list of all genes can be found <a href='/all_genes/'>here</a>. A list of all ids can be found <a href='/all_ids/'>here</a>.
+                </p>
+                {% endif %}
             </div>
         </div>
 <script>

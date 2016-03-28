@@ -203,11 +203,19 @@ def search_results(request):
                     results=ONCOLNC_lncRNA.objects.filter(gene_id=q).values('p_value','Cox','median','gene_id','fdr','rank','mean','cancer')
                 species='lncRNA'
             else:
-                error=True
-                if cancer:
-                    return render(request, 'cancer.html', {'error': error,'cancer_error':False})
+                from pan_cancer.synonyms import synonyms
+                if q not in synonyms:
+                    error=True
+                    if cancer:
+                        return render(request, 'cancer.html', {'error': error,'cancer_error':False})
+                    else:
+                        return render(request, 'home.html', {'error': error})
                 else:
-                    return render(request, 'home.html', {'error': error})
+                    suggestion=synonyms[q]
+                    if cancer:
+                        return render(request, 'cancer.html', {'suggestion': suggestion,'cancer_error':False,'raw':raw})
+                    else:
+                        return render(request, 'home.html', {'suggestion': suggestion,'raw':raw})
             missing=False
             if len(results)<21 and not cancer:
                 missing=True

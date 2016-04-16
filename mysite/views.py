@@ -293,8 +293,13 @@ def kaplan(request):
                 bottom=int(len(data)*int(lower)/100.0)
                 top=int(len(data)*int(upper)/100.0)*-1
                 bottom_patients=[i[1]+[(str(i[0])+'\n')] for i in data[:bottom]]
+                if bottom==0:
+                    bottom_patients=[i[1]+[(str(i[0])+'\n')] for i in data[:1]]
                 if top==0:
-                    top_patients=[]
+                    if int(upper)!=0:
+                        top_patients=[i[1]+[(str(i[0])+'\n')] for i in data[-1:]]
+                    else:
+                        top_patients=[]
                 else:
                     top_patients=[i[1]+[(str(i[0])+'\n')] for i in data[top:]]
                 first_line='{0:<16}{1:<5}{2:>10}{3:>15}'.format('Patient','Days','Status','Expression\n')

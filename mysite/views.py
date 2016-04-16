@@ -330,54 +330,54 @@ def kaplan(request):
    
 
 def make_kaplan(request):
-    try:
-        from matplotlib.backends.backend_agg import FigureCanvasAgg
-        from matplotlib.figure import Figure
-        import matplotlib.pyplot as plt
-        import gc
-        message='Please get to this page by clicking the PLOT button ;)'
-        if not request.META.get('HTTP_REFERER',False):
-            return HttpResponse(message)
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+    from matplotlib.figure import Figure
+    import matplotlib.pyplot as plt
+    import gc
+    message='Please get to this page by clicking the PLOT button ;)'
+    if not request.META.get('HTTP_REFERER',False):
+        return HttpResponse(message)
+    else:
+        Cancer=request.META['HTTP_REFERER'].split('cancer=')[1].split('&')[0]
+        Gene_id=request.META['HTTP_REFERER'].split('gene_id=')[1].split('&')[0]
+        Raw=request.META['HTTP_REFERER'].split('raw=')[1].split('&')[0]
+        Species=request.META['HTTP_REFERER'].split('species=')[1]
+        Lower=request.META['HTTP_REFERER'].split('lower=')[1].split('&')[0]
+        Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
+        if Species=='mRNA':
+            patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+            result = CANCERS[Cancer].objects.get(gene_id=Gene_id)
+        elif Species=='miRNA':
+            patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+            result = ONCOLNC_miRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
         else:
-            Cancer=request.META['HTTP_REFERER'].split('cancer=')[1].split('&')[0]
-            Gene_id=request.META['HTTP_REFERER'].split('gene_id=')[1].split('&')[0]
-            Raw=request.META['HTTP_REFERER'].split('raw=')[1].split('&')[0]
-            Species=request.META['HTTP_REFERER'].split('species=')[1]
-            Lower=request.META['HTTP_REFERER'].split('lower=')[1].split('&')[0]
-            Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
-            if Species=='mRNA':
-                patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-                result = CANCERS[Cancer].objects.get(gene_id=Gene_id)
-            elif Species=='miRNA':
-                patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-                result = ONCOLNC_miRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+            patients=eval(lncRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+            result = ONCOLNC_lncRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+        expression=eval(result.expression)
+        data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
+        data.sort()
+        bottom=int(len(data)*int(Lower)/100.0)
+        top=int(len(data)*int(Upper)/100.0)*-1
+        bottom_patients=[i[1] for i in data[:bottom]]
+        if bottom==0:
+            bottom_patients=[i[1] for i in data[:1]]
+        if top==0:
+            if int(upper)!=0:
+                top_patients=[i[1] for i in data[-1:]]
             else:
-                patients=eval(lncRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-                result = ONCOLNC_lncRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
-            expression=eval(result.expression)
-            data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
-            data.sort()
-            bottom=int(len(data)*int(Lower)/100.0)
-            top=int(len(data)*int(Upper)/100.0)*-1
-            bottom_patients=[i[1] for i in data[:bottom]]
-            if bottom==0:
-                bottom_patients=[i[1] for i in data[:1]]
-            if top==0:
-                if int(upper)!=0:
-                    top_patients=[i[1] for i in data[-1:]]
-                else:
-                    top_patients=[[]]
-            else:
-                top_patients=[i[1] for i in data[top:]]
-            survtimes=[[int(i[1]),i[2]] for i in bottom_patients]
-            survtimes.sort(key=lambda x:(x[0],x[1]))
-            k_plot=plot_kaplan(survtimes)
-            fig=Figure(figsize=(22.62372, 12),facecolor='white')
-            ax=fig.add_subplot(111,)
-            fig.subplots_adjust(bottom=.15)
-            fig.subplots_adjust(top=1)
-            width=3
-            start=0
+                top_patients=[[]]
+        else:
+            top_patients=[i[1] for i in data[top:]]
+        survtimes=[[int(i[1]),i[2]] for i in bottom_patients]
+        survtimes.sort(key=lambda x:(x[0],x[1]))
+        k_plot=plot_kaplan(survtimes)
+        fig=Figure(figsize=(22.62372, 12),facecolor='white')
+        ax=fig.add_subplot(111,)
+        fig.subplots_adjust(bottom=.15)
+        fig.subplots_adjust(top=1)
+        width=3
+        start=0
+        try:
             for i in k_plot[0]:
                 ax.hlines(i[1]*100,start,i[0],linewidths=width,color='b',label='cluster 1')
                 start=i[0]
@@ -387,7 +387,6 @@ def make_kaplan(request):
     
             for i in k_plot[1]:
                 cluster1=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='b')
-    
     
             for i in k_plot[2]:
                 ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='b')
@@ -405,7 +404,6 @@ def make_kaplan(request):
     
                 for i in k_plot[1]:
                     cluster2=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='r')
-    
     
                 for i in k_plot[2]:
                     ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='r')
@@ -432,16 +430,24 @@ def make_kaplan(request):
             ax.set_xlim(0,)
             ax.set_xlabel('Days',fontsize=40,labelpad=20)
             ax.set_ylabel('% Surviving',fontsize=40)
-            canvas=FigureCanvasAgg(fig)
-            response=HttpResponse(content_type='image/png')
-            canvas.print_png(response)
-            fig.clf()
-            plt.close(fig)
-            del canvas
-            gc.collect()
-            return response
-    except:
-        return HttpResponse('Please get to this page by clicking the PLOT button ;)')
+        except:
+            font={'family':'Arial',
+            'color'  : 'k',
+            'weight' : 'normal',
+            'size'   : 60,
+            }
+            ax.text(20,60,"Please add more patients",fontdict=font)
+            ax.set_ylim(0,105)
+            ax.set_xlim(0,100)
+        canvas=FigureCanvasAgg(fig)
+        response=HttpResponse(content_type='image/png')
+        canvas.print_png(response)
+        fig.clf()
+        plt.close(fig)
+        del canvas
+        gc.collect()
+        return response
+
 
 def download_kaplan(request):
     from matplotlib.backends.backend_agg import FigureCanvasAgg

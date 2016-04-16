@@ -19,7 +19,6 @@ from mysite import views
 
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.home),
     url(r'^search_results/$', views.search_results),
     url(r'^kaplan/$', views.kaplan),
@@ -28,6 +27,7 @@ urlpatterns = [
     url(r'^all_genes/$', views.gene_list),
     url(r'^all_ids/$', views.id_list),
     url(r'^cancer/$', views.cancer),
-    url(r'^download_excel/$', views.download_excel),   
+    url(r'^download_excel/$', views.download_excel),
+    url(r'^plot_error/$', views.plot_error)
     
 ]

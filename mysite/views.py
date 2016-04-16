@@ -330,110 +330,118 @@ def kaplan(request):
    
 
 def make_kaplan(request):
-    from matplotlib.backends.backend_agg import FigureCanvasAgg
-    from matplotlib.figure import Figure
-    import matplotlib.pyplot as plt
-    import gc
-    message='Please get to this page by clicking the PLOT button ;)'
-    if not request.META.get('HTTP_REFERER',False):
-        return HttpResponse(message)
-    else:
-        Cancer=request.META['HTTP_REFERER'].split('cancer=')[1].split('&')[0]
-        Gene_id=request.META['HTTP_REFERER'].split('gene_id=')[1].split('&')[0]
-        Raw=request.META['HTTP_REFERER'].split('raw=')[1].split('&')[0]
-        Species=request.META['HTTP_REFERER'].split('species=')[1]
-        Lower=request.META['HTTP_REFERER'].split('lower=')[1].split('&')[0]
-        Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
-        if Species=='mRNA':
-            patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-            result = CANCERS[Cancer].objects.get(gene_id=Gene_id)
-        elif Species=='miRNA':
-            patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-            result = ONCOLNC_miRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+    try:
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+        from matplotlib.figure import Figure
+        import matplotlib.pyplot as plt
+        import gc
+        message='Please get to this page by clicking the PLOT button ;)'
+        if not request.META.get('HTTP_REFERER',False):
+            return HttpResponse(message)
         else:
-            patients=eval(lncRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
-            result = ONCOLNC_lncRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
-        expression=eval(result.expression)
-        data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
-        data.sort()
-        bottom=int(len(data)*int(Lower)/100.0)
-        top=int(len(data)*int(Upper)/100.0)*-1
-        bottom_patients=[i[1] for i in data[:bottom]]
-        if top==0:
-            top_patients=[[]]
-        else:
-            top_patients=[i[1] for i in data[top:]]
-        survtimes=[[int(i[1]),i[2]] for i in bottom_patients]
-        survtimes.sort(key=lambda x:(x[0],x[1]))
-        k_plot=plot_kaplan(survtimes)
-        fig=Figure(figsize=(22.62372, 12),facecolor='white')
-        ax=fig.add_subplot(111,)
-        fig.subplots_adjust(bottom=.15)
-        fig.subplots_adjust(top=1)
-        width=3
-        start=0
-        for i in k_plot[0]:
-            ax.hlines(i[1]*100,start,i[0],linewidths=width,color='b',label='cluster 1')
-            start=i[0]
-
-        if k_plot[-1][-1][0]>k_plot[0][-1][0]:
-            ax.hlines(k_plot[-1][-1][1]*100,k_plot[0][-1][0],k_plot[-1][-1][0],linewidths=width,color='b')
-
-        for i in k_plot[1]:
-            cluster1=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='b')
-
-
-        for i in k_plot[2]:
-            ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='b')
-        if top!=0:
-            survtimes=[[int(i[1]),i[2]] for i in top_patients]
+            Cancer=request.META['HTTP_REFERER'].split('cancer=')[1].split('&')[0]
+            Gene_id=request.META['HTTP_REFERER'].split('gene_id=')[1].split('&')[0]
+            Raw=request.META['HTTP_REFERER'].split('raw=')[1].split('&')[0]
+            Species=request.META['HTTP_REFERER'].split('species=')[1]
+            Lower=request.META['HTTP_REFERER'].split('lower=')[1].split('&')[0]
+            Upper=request.META['HTTP_REFERER'].split('upper=')[1].split('&')[0]
+            if Species=='mRNA':
+                patients=eval(mRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+                result = CANCERS[Cancer].objects.get(gene_id=Gene_id)
+            elif Species=='miRNA':
+                patients=eval(miRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+                result = ONCOLNC_miRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+            else:
+                patients=eval(lncRNA_PATIENTS.objects.get(cancer=Cancer).clinical)
+                result = ONCOLNC_lncRNA.objects.get(gene_id=Gene_id,cancer=Cancer)
+            expression=eval(result.expression)
+            data=[[i,j] for i,j in zip(expression,patients) if i!='nan']
+            data.sort()
+            bottom=int(len(data)*int(Lower)/100.0)
+            top=int(len(data)*int(Upper)/100.0)*-1
+            bottom_patients=[i[1] for i in data[:bottom]]
+            if bottom==0:
+                bottom_patients=[i[1] for i in data[:1]]
+            if top==0:
+                if int(upper)!=0:
+                    top_patients=[i[1] for i in data[-1:]]
+                else:
+                    top_patients=[[]]
+            else:
+                top_patients=[i[1] for i in data[top:]]
+            survtimes=[[int(i[1]),i[2]] for i in bottom_patients]
             survtimes.sort(key=lambda x:(x[0],x[1]))
             k_plot=plot_kaplan(survtimes)
+            fig=Figure(figsize=(22.62372, 12),facecolor='white')
+            ax=fig.add_subplot(111,)
+            fig.subplots_adjust(bottom=.15)
+            fig.subplots_adjust(top=1)
+            width=3
             start=0
             for i in k_plot[0]:
-                ax.hlines(i[1]*100,start,i[0],linewidths=width,color='r',label='cluster 2')
+                ax.hlines(i[1]*100,start,i[0],linewidths=width,color='b',label='cluster 1')
                 start=i[0]
-
+    
             if k_plot[-1][-1][0]>k_plot[0][-1][0]:
-                ax.hlines(k_plot[-1][-1][1]*100,k_plot[0][-1][0],k_plot[-1][-1][0],linewidths=width,color='r')
-
+                ax.hlines(k_plot[-1][-1][1]*100,k_plot[0][-1][0],k_plot[-1][-1][0],linewidths=width,color='b')
+    
             for i in k_plot[1]:
-                cluster2=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='r')
-
-
+                cluster1=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='b')
+    
+    
             for i in k_plot[2]:
-                ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='r')
-        ax.tick_params(axis='x',length=15,width=3,direction='out',labelsize=30)
-        ax.tick_params(axis='y',length=15,width=3,direction='out',labelsize=30)
-        ax.spines['bottom'].set_position(['outward',10])
-        ax.spines['left'].set_position(['outward',10])
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['left'].set_linewidth(3)
-        ax.spines['bottom'].set_linewidth(3)
-        ax.spines['left'].set_bounds(0,100)
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
-        cluster1=ax.hlines(0,0,0,linewidths=10,color='b',label='cluster 1')
-        if top!=0:
-            cluster2=ax.hlines(0,0,0,linewidths=10,color='r',label='cluster 2')
-        if top!=0:
-            ax.legend((cluster1,cluster2),('   Low \n N=%s' % len(bottom_patients),'   High \n N=%s' % len(top_patients)),\
-                      frameon=False,fontsize=25,ncol=2, loc='upper center',handletextpad=0,borderpad=0)
-        else:
-            pass
-        ax.set_ylim(0,105)
-        ax.set_xlim(0,)
-        ax.set_xlabel('Days',fontsize=40,labelpad=20)
-        ax.set_ylabel('% Surviving',fontsize=40)
-        canvas=FigureCanvasAgg(fig)
-        response=HttpResponse(content_type='image/png')
-        canvas.print_png(response)
-        fig.clf()
-        plt.close(fig)
-        del canvas
-        gc.collect()
-        return response
+                ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='b')
+            if top!=0:
+                survtimes=[[int(i[1]),i[2]] for i in top_patients]
+                survtimes.sort(key=lambda x:(x[0],x[1]))
+                k_plot=plot_kaplan(survtimes)
+                start=0
+                for i in k_plot[0]:
+                    ax.hlines(i[1]*100,start,i[0],linewidths=width,color='r',label='cluster 2')
+                    start=i[0]
+    
+                if k_plot[-1][-1][0]>k_plot[0][-1][0]:
+                    ax.hlines(k_plot[-1][-1][1]*100,k_plot[0][-1][0],k_plot[-1][-1][0],linewidths=width,color='r')
+    
+                for i in k_plot[1]:
+                    cluster2=ax.vlines(i[0],i[2]*100-(width*715/10000.0),i[1]*100+(width*715/10000.0),linewidths=width,color='r')
+    
+    
+                for i in k_plot[2]:
+                    ax.vlines(i[0],(i[1]-.01)*100,(i[1]+.01)*100,color='r')
+            ax.tick_params(axis='x',length=15,width=3,direction='out',labelsize=30)
+            ax.tick_params(axis='y',length=15,width=3,direction='out',labelsize=30)
+            ax.spines['bottom'].set_position(['outward',10])
+            ax.spines['left'].set_position(['outward',10])
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['left'].set_linewidth(3)
+            ax.spines['bottom'].set_linewidth(3)
+            ax.spines['left'].set_bounds(0,100)
+            ax.xaxis.set_ticks_position('bottom')
+            ax.yaxis.set_ticks_position('left')
+            cluster1=ax.hlines(0,0,0,linewidths=10,color='b',label='cluster 1')
+            if top!=0:
+                cluster2=ax.hlines(0,0,0,linewidths=10,color='r',label='cluster 2')
+            if top!=0:
+                ax.legend((cluster1,cluster2),('   Low \n N=%s' % len(bottom_patients),'   High \n N=%s' % len(top_patients)),\
+                          frameon=False,fontsize=25,ncol=2, loc='upper center',handletextpad=0,borderpad=0)
+            else:
+                pass
+            ax.set_ylim(0,105)
+            ax.set_xlim(0,)
+            ax.set_xlabel('Days',fontsize=40,labelpad=20)
+            ax.set_ylabel('% Surviving',fontsize=40)
+            canvas=FigureCanvasAgg(fig)
+            response=HttpResponse(content_type='image/png')
+            canvas.print_png(response)
+            fig.clf()
+            plt.close(fig)
+            del canvas
+            gc.collect()
+            return response
+    except:
+        return HttpResponse('Please get to this page by clicking the PLOT button ;)')
 
 def download_kaplan(request):
     from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -465,8 +473,13 @@ def download_kaplan(request):
         bottom=int(len(data)*int(Lower)/100.0)
         top=int(len(data)*int(Upper)/100.0)*-1
         bottom_patients=[i[1] for i in data[:bottom]]
+        if bottom==0:
+            bottom_patients=[i[1] for i in data[:1]]
         if top==0:
-            top_patients=[[]]
+            if int(upper)!=0:
+                top_patients=[i[1] for i in data[-1:]]
+            else:
+                top_patients=[[]]
         else:
             top_patients=[i[1] for i in data[top:]]
         survtimes=[[int(i[1]),i[2]] for i in bottom_patients]
@@ -574,8 +587,13 @@ def download_excel(request):
         bottom=int(len(data)*int(Lower)/100.0)
         top=int(len(data)*int(Upper)/100.0)*-1
         bottom_patients=[i[1]+[i[0]]+['Low'] for i in data[:bottom]]
+        if bottom==0:
+            bottom_patients=[i[1]+[i[0]]+['Low'] for i in data[:1]]
         if top==0:
-            top_patients=[]
+            if int(upper)!=0:
+                top_patients=[i[1]+[i[0]]+['High'] for i in data[-1:]]
+            else:
+                top_patients=[]
         else:
             top_patients=[i[1]+[i[0]]+['High'] for i in data[top:]]
         first_line=[['Patient','Days','Status','Expression','Group']]

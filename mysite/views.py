@@ -459,7 +459,7 @@ def make_kaplan(request):
 
 
 def download_kaplan(request):
-        try:
+    try:
         from matplotlib.backends.backend_agg import FigureCanvasAgg
         from matplotlib.figure import Figure
         import matplotlib.pyplot as plt

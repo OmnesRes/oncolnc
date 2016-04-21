@@ -98,6 +98,9 @@ def cancer(request):
 def plot_error(request):
     return HttpResponse('It appears you need to add more patients')
 
+def download(request):
+    return render(request, 'download.html')
+
 
 def search_results(request):
     if request.META.get('HTTP_REFERER',False):

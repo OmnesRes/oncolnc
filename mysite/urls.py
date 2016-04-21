@@ -28,6 +28,6 @@ urlpatterns = [
     url(r'^all_ids/$', views.id_list),
     url(r'^cancer/$', views.cancer),
     url(r'^download_excel/$', views.download_excel),
-    url(r'^plot_error/$', views.plot_error)
-    
+    url(r'^plot_error/$', views.plot_error),
+    url(r'^download/$', views.download)
 ]

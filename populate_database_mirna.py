@@ -12,7 +12,7 @@ def compare(first,second):
 cancers=['BLCA','BRCA','CESC','COAD','ESCA','GBM','HNSC','KIRC','KIRP','LAML','LGG','LIHC','LUAD','LUSC','OV','PAAD',\
                'READ','SARC','SKCM','STAD','UCEC']
 
-cancers=['BRCA','UCEC']
+cancers=['CESC','COAD','GBM','HNSC','KIRC','LGG','LUAD','LUSC','OV','READ','SKCM','STAD']
 import numpy as np
 
 f=open(r'C:\Users\Jordan Anaya\Desktop\omnesres\oncolnc\mirna\mature.fa')

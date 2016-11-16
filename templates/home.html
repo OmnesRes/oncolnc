@@ -19,13 +19,13 @@
         margin-bottom:10px;
     }
     .entry{
-        margin-top:-120px;
+        margin-top:-70px;
         margin-bottom:10px;
        }
     .form-control{
-        font-size:60px;
+        font-size:48px;
         text-align:center;
-        height:100px;
+        height:80px;
     }
     .info {
     clear:all;
@@ -33,24 +33,18 @@
     text-align:justify;
     }
 
-    .newinfo {
+    .entry_info {
     clear:all;
     font-size:24px;
     text-align:center;
-    font-weight:bold;
-    margin-top:10px;
-    }
-    .entry_info {
-    clear:all;
-    font-size:32px;
-    text-align:center;
     position:relative;
-    top:200px;
+    top:150px;
+    z-index:1000;
     }
     p {
     position:relative;
     font-size:20px;
-    bottom:230px;
+    bottom:200px;
     }
     .tooltip-inner{
     max-width: 300px;
@@ -59,6 +53,13 @@
     background-color: white;
     border: 3px solid #337AB7;
     }
+
+    .tooltip.in {
+    opacity: 1;
+    }
+
+
+
     .tooltip.top .tooltip-arrow{
     border-top-color: #337AB7;
     border-top-width: 6px;
@@ -84,14 +85,12 @@
         <div class="col-sm-12">
             <div class="col-sm-8 col-sm-push-2 info">
                 Here you can link TCGA survival data to mRNA, miRNA, or lncRNA expression levels.  To get started simply input either a Tier 3 TCGA mRNA<sup data-toggle="tooltip" title="Either a current Entrez Gene ID or HUGO Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>, miRNA<sup data-toggle="tooltip" title="Either a mature miRBase Accession Number or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>, or MiTranscriptome beta lncRNA<sup data-toggle="tooltip" title="Either a Transcript ID or Name will work" data-placement="top"><i class="fa fa-info-circle" style="color:#337AB7"></i></sup>.  More information can be found at this <a href="https://peerj.com/articles/cs-67/">publication</a>, <a href="https://www.youtube.com/watch?v=5h5NU15pKoI">youtube</a>, or <a href="http://www.omnesres.com">Omnes Res</a>.
+                <span style="display:block;margin-top:10px">
+                <b>News</b><br>
+                A pan-cancer analysis using data in OncoLnc: <a href="https://peerj.com/preprints/2574/">OncoRank</a></span>
             </div>
         </div>
-        <div class="col-sm-12">
-            <div class="col-sm-8 col-sm-push-2 newinfo">
-                <b>An <a href="https://github.com/OmnesRes/onco_lnc/issues/1">issue</a> was raised on July 13th and was resolved on July 15th.</b>
-            </div>
-        </div>
-        <div class="col-sm-12 text-center" style="position:relative;top:450px;color:#4d4d4d">
+        <div class="col-sm-12 text-center" style="position:relative;top:350px;color:#4d4d4d">
             <span style="font-size:20px">If you use data from OncoLnc in your publications please follow the <a href="http://cancergenome.nih.gov/publications/publicationguidelines">TCGA publication guidelines</a> and cite this <a href="https://peerj.com/articles/cs-67/">paper</a></span>
             <br>
             <span style="font-size:20px">To stay up to date on OncoLnc news follow @omnesresnetwork</span>
